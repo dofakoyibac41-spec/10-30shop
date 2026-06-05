@@ -17,9 +17,9 @@
         <RouterLink to="/catalog" class="navbar__link label-sm">
           Каталог
         </RouterLink>
-        <a href="/#about" class="navbar__link label-sm">
+        <RouterLink to="/#about" class="navbar__link label-sm">
           О нас
-        </a>
+        </RouterLink>
       </nav>
     </div>
   </header>

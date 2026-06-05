@@ -15,9 +15,17 @@ const router = express.Router();
 // Query params: category_id (опционально), limit (default 6), offset (default 0)
 // Ответ: { items: [...], total: N }
 router.get('/', (req, res) => {
-  const limit      = Math.max(1, parseInt(req.query.limit,  10) || 6);
-  const offset     = Math.max(0, parseInt(req.query.offset, 10) || 0);
-  const categoryId = req.query.category_id ? parseInt(req.query.category_id, 10) : null;
+  const limit  = Math.max(1, parseInt(req.query.limit,  10) || 6);
+  const offset = Math.max(0, parseInt(req.query.offset, 10) || 0);
+
+  // [РЕК-2 Sprint 1] Явная валидация category_id — если не число → 400
+  let categoryId = null;
+  if (req.query.category_id !== undefined) {
+    categoryId = parseInt(req.query.category_id, 10);
+    if (isNaN(categoryId)) {
+      return res.status(400).json({ error: 'category_id должен быть целым числом' });
+    }
+  }
 
   let itemsSql = 'SELECT * FROM products';
   let countSql = 'SELECT COUNT(*) as total FROM products';
