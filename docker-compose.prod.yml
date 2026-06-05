@@ -1,16 +1,17 @@
 # ─── Docker Compose PRODUCTION — 10:30 AM Shop ───────────────────────────────
-# ВА-2: Production-конфиг для деплоя на Timeweb VPS.
+# Production-конфиг для деплоя на Timeweb VPS.
 #
 # Отличия от docker-compose.yml (dev):
-#   - Нет монтирования кода (./backend:/app, ./frontend:/app) — код внутри образа
-#   - Нет nodemon — backend запускается через node server.js
-#   - Frontend — статика собрана Vite и отдаётся Nginx
+#   - target: production / target: nginx — multi-stage build (см. Dockerfile'ы)
+#   - Нет монтирования кода — код упакован внутри образа
+#   - Нет nodemon — backend: node server.js напрямую
+#   - Frontend собирается Vite (npm run build) → nginx отдаёт dist/ как статику
 #   - Nginx — reverse proxy: статика + /api/* → backend
 #
 # Запуск на сервере:
 #   docker compose -f docker-compose.prod.yml up -d --build
 #
-# Требует на сервере: backend/.env.prod (скопировать из .env.example и заполнить)
+# Требует на сервере: backend/.env.prod (скопировать из backend/.env.example и заполнить)
 
 name: 1030shop
 
@@ -21,7 +22,8 @@ services:
     container_name: 1030shop-backend
     build:
       context: ./backend
-      # Multi-stage build: копирует только prod-зависимости (без nodemon)
+      # Stage "production" в backend/Dockerfile:
+      # только prod-зависимости (без nodemon) + COPY . . внутрь образа
       target: production
     # Нет монтирования кода — используется то что внутри образа (COPY . .)
     volumes:
