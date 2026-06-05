@@ -13,7 +13,11 @@ services:
   # ─── Backend: Node.js + Express + SQLite ──────────────────────────────────
   backend:
     container_name: 1030shop-backend
-    build: ./backend
+    build:
+      context: ./backend
+      # [ВА-5] target: dev обязателен при multi-stage Dockerfile.
+      # Без него Docker берёт последний stage ("production") — nodemon не будет установлен.
+      target: dev
     ports:
       - "3001:3001"
     volumes:
@@ -36,7 +40,11 @@ services:
   # ─── Frontend: Vue.js 3 + Vite ────────────────────────────────────────────
   frontend:
     container_name: 1030shop-frontend
-    build: ./frontend
+    build:
+      context: ./frontend
+      # [КР-3] target: dev обязателен при multi-stage Dockerfile.
+      # Без него Docker берёт последний stage ("nginx") — Vite не запустится, запустится nginx.
+      target: dev
     ports:
       - "5173:5173"
     volumes:
