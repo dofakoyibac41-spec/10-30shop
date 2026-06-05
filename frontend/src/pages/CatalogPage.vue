@@ -24,7 +24,7 @@
         <div v-if="error" class="catalog__error">
           <p class="headline-md">Ошибка загрузки</p>
           <p class="body-lg text-muted">{{ error }}</p>
-          <button class="btn-ghost" style="margin-top: 32px;" @click="loadProducts(true)">
+          <button class="btn-ghost catalog__error-btn" @click="loadProducts(true)">
             Попробовать снова
           </button>
         </div>
@@ -153,22 +153,23 @@ async function onCategorySelect(catId) {
 }
 
 // ─── Инициализация при монтировании ──────────────────────────────────────────
+// [РЕК-2 из ревью Sprint 3] getCategories и loadProducts запускаются параллельно
+// через Promise.all — оба запроса независимы, ждать первого не нужно.
 onMounted(async () => {
-  // Параллельно загружаем категории для фильтра
-  try {
-    categories.value = await getCategories();
-  } catch (e) {
-    console.error('[CatalogPage] Ошибка загрузки категорий:', e);
-  }
-
-  // DEV-9: Читаем query-параметр ?category=N из URL
+  // DEV-9: Читаем query-параметр ?category=N ДО запроса товаров
   // Позволяет открывать каталог с уже применённым фильтром (клик с главной)
   const catFromUrl = route.query.category ? parseInt(route.query.category, 10) : null;
   if (catFromUrl !== null && !isNaN(catFromUrl)) {
     activeCategory.value = catFromUrl;
   }
 
-  await loadProducts(true);
+  // Параллельная загрузка категорий и товаров
+  await Promise.all([
+    getCategories()
+      .then((cats) => { categories.value = cats; })
+      .catch((e) => { console.error('[CatalogPage] Ошибка загрузки категорий:', e); }),
+    loadProducts(true),
+  ]);
 });
 </script>
 
@@ -235,6 +236,12 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* [КР-1 из ревью] Убран inline style="margin-top: 32px" → CSS-класс */
+.catalog__error-btn {
+  margin-top: 32px;
+  align-self: flex-start;
 }
 
 /* ─── Кнопка «Показать ещё» ─────────────────────────────────────────────── */

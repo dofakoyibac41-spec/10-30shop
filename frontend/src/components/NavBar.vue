@@ -17,7 +17,8 @@
         <RouterLink to="/catalog" class="navbar__link label-sm">
           Каталог
         </RouterLink>
-        <RouterLink to="/#about" class="navbar__link label-sm">
+        <!-- [РЕК-1 из ревью] exact — не подсвечивает ссылку как active на /catalog и других маршрутах -->
+        <RouterLink to="/#about" class="navbar__link label-sm" exact>
           О нас
         </RouterLink>
       </nav>
