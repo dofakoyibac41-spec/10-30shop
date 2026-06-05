@@ -8,14 +8,14 @@
     <!-- Изображение с hover-эффектом -->
     <div class="product-card__image-wrap">
       <img
-        v-if="image_url"
-        :src="image_url"
+        v-if="displayImage"
+        :src="displayImage"
         :alt="name"
         class="product-card__image"
         loading="lazy"
         @error="onImageError"
       />
-      <!-- Placeholder если URL не загрузился или пустой -->
+      <!-- Placeholder если URL не загрузился, пустой, или ошибка 404 -->
       <div v-else class="product-card__placeholder" aria-hidden="true" />
     </div>
 
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   id:          { type: Number, required: true },
@@ -46,8 +46,11 @@ function onImageError() {
   imageError.value = true;
 }
 
-// Пересчитываем: показывать img если url есть и нет ошибки
-const image_url = imageError.value ? '' : props.image_url;
+// computed — реактивный: пересчитывается при изменении imageError.
+// Переименован в displayImage чтобы не затенять (shadow) props.image_url.
+const displayImage = computed(() =>
+  imageError.value ? '' : props.image_url
+);
 </script>
 
 <style scoped>

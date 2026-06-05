@@ -11,7 +11,7 @@
       class="filter__chip label-sm"
       :class="{ 'filter__chip--active': activeId === null }"
       @click="$emit('select', null)"
-      aria-pressed="activeId === null"
+      :aria-pressed="activeId === null"
     >
       Все
     </button>

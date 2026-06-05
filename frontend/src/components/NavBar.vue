@@ -11,7 +11,8 @@
         <img src="/logo.png" alt="10:30 AM" class="navbar__logo-img" />
       </RouterLink>
 
-      <!-- Навигация (скрыта на мобилке) -->
+      <!-- Навигация (скрыта на мобилке через .hide-mobile → display:none) -->
+      <!-- aria-hidden синхронизирован с видимостью через CSS media (Sprint 5 добавит гамбургер) -->
       <nav class="navbar__nav hide-mobile" aria-label="Основная навигация">
         <RouterLink to="/catalog" class="navbar__link label-sm">
           Каталог
