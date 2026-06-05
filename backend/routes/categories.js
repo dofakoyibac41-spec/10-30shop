@@ -1,7 +1,8 @@
-// ─── Categories Router — /api/categories ─────────────────────────────────────
+// ─── Categories Router — /api/categories ────────────────────────────────────────────────
 // GET    /api/categories        — публичный, список всех категорий
 // POST   /api/categories        — 🔒 JWT, создать категорию
-// DELETE /api/categories/:id    — 🔒 JWT, удалить (запрет если есть товары)
+// PATCH  /api/categories/:id   — 🔒 JWT, переименовать категорию [РЕК-1 Sprint 1]
+// DELETE /api/categories/:id   — 🔒 JWT, удалить (запрет если есть товары)
 'use strict';
 
 const express        = require('express');
@@ -60,6 +61,36 @@ router.delete('/:id', authMiddleware, (req, res) => {
 
   db.prepare('DELETE FROM categories WHERE id = ?').run(id);
   res.status(204).send();
+});
+
+// ─── PATCH /api/categories/:id ────────────────────────────────────────────────────────────────
+// [РЕК-1 из Sprint 1] Переименование без удаления
+// Принимает: { name, image_url? }
+// Возвращает: обновлённый объект категории
+router.patch('/:id', authMiddleware, (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'Некорректный id' });
+  }
+
+  const category = db.prepare('SELECT * FROM categories WHERE id = ?').get(id);
+  if (!category) {
+    return res.status(404).json({ error: 'Категория не найдена' });
+  }
+
+  const { name, image_url } = req.body || {};
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: 'Поле name обязательно' });
+  }
+
+  // image_url: если передан — обновляем, если нет — оставляем текущий
+  const newImageUrl = image_url !== undefined ? (image_url || null) : category.image_url;
+
+  db.prepare('UPDATE categories SET name = ?, image_url = ? WHERE id = ?')
+    .run(name.trim(), newImageUrl, id);
+
+  const updated = db.prepare('SELECT * FROM categories WHERE id = ?').get(id);
+  res.json(updated);
 });
 
 module.exports = router;

@@ -7,6 +7,9 @@ export function useAuth() {
   const getToken = () => localStorage.getItem('token');
   const isAuthenticated = () => !!getToken();
 
+  // [DEV-2 Sprint 4] Возвращает заголовок Authorization для защищённых запросов
+  const getAuthHeader = () => ({ Authorization: `Bearer ${getToken()}` });
+
   const login = async (loginVal, password) => {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -23,5 +26,5 @@ export function useAuth() {
     localStorage.removeItem('token');
   };
 
-  return { getToken, isAuthenticated, login, logout };
+  return { getToken, isAuthenticated, getAuthHeader, login, logout };
 }

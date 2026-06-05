@@ -220,19 +220,24 @@ shop/
 
 ---
 
-### 🐳 Sprint 0 — Docker-окружение
+### ✅ Sprint 0 — Docker-окружение
 **Цель:** Изолированный контейнер для разработки, видимый в Docker Desktop
+**Статус: ✅ ВЫПОЛНЕНО** (2026-06-05, ревью v4 принято)
 
 **Задачи:**
-- [ ] Создать `backend/Dockerfile` — Node.js образ с hot-reload (`nodemon`)
-- [ ] Создать `frontend/Dockerfile` — Vite dev-сервер в контейнере
-- [ ] Создать `docker-compose.yml` в корне проекта:
+- [x] Создать `backend/Dockerfile` — Node.js образ с hot-reload (`nodemon`)
+- [x] Создать `frontend/Dockerfile` — Vite dev-сервер в контейнере
+- [x] Создать `docker-compose.yml` в корне проекта:
   - `name: 1030shop` — **изоляция** от других проектов в Docker Desktop
   - Сервис `1030shop-backend`: порт `3001:3001`, volume для кода и SQLite
   - Сервис `1030shop-frontend`: порт `5173:5173`, volume для кода
   - Named volume `1030shop-db` для хранения `shop.db` (данные не теряются)
-- [ ] Проверить запуск: `docker compose up` → оба контейнера видны в Docker Desktop
-- [ ] Убедиться что фронт открывается на `localhost:5173`, бэкенд на `localhost:3001`
+  - `target: dev` для обоих сервисов (multi-stage Dockerfile)
+- [x] Проверить запуск: `docker compose up` → оба контейнера видны в Docker Desktop
+- [x] Убедиться что фронт открывается на `localhost:5173`, бэкенд на `localhost:3001`
+- [x] Настроить CORS (ALLOWED_ORIGINS), JWT_SECRET, ADMIN_PASSWORD в `.env`
+- [x] Multi-stage Dockerfiles: dev / production для backend и frontend
+- [x] `docker-compose.prod.yml` + `nginx/nginx.prod.conf` для продакшна
 
 > Пример структуры `docker-compose.yml`:
 > ```yaml
@@ -240,7 +245,9 @@ shop/
 > services:
 >   backend:
 >     container_name: 1030shop-backend
->     build: ./backend
+>     build:
+>       context: ./backend
+>       target: dev
 >     ports: ["3001:3001"]
 >     volumes:
 >       - ./backend:/app
@@ -248,7 +255,9 @@ shop/
 >     env_file: ./backend/.env
 >   frontend:
 >     container_name: 1030shop-frontend
->     build: ./frontend
+>     build:
+>       context: ./frontend
+>       target: dev
 >     ports: ["5173:5173"]
 >     volumes:
 >       - ./frontend:/app
@@ -260,29 +269,30 @@ shop/
 
 **Результат:** Проект запускается одной командой `docker compose up`, виден в Docker Desktop как `1030shop`
 
-### 🏗️ Sprint 1 — Фундамент
+### ✅ Sprint 1 — Фундамент
 **Цель:** Рабочая структура проекта, бэкенд с БД, базовый API
+**Статус: ✅ ВЫПОЛНЕНО** (2026-06-05, ревью v1 принято, 27/27 тестов)
 
 **Задачи:**
-- [ ] Инициализация Vite + Vue.js проекта (`frontend/`)
-- [ ] Создание stub-компонентов для всех страниц (`HomePage.vue`, `CatalogPage.vue`, `AdminPage.vue`, `LoginPage.vue`) — пустые заглушки
-- [ ] Настройка Vue Router (4 маршрута: /, /catalog, /admin, /admin/login) — подключить stub-компоненты
-- [ ] Инициализация Node.js + Express проекта (`backend/`)
-- [ ] Подключение SQLite, создание таблиц `products` и `categories`
-- [ ] Наполнение БД тестовыми категориями и товарами
-- [ ] Реализация GET/POST/DELETE `/api/categories`
-- [ ] Реализация GET `/api/products` с фильтром по `category_id`, пагинацией (`limit`/`offset`) и полем `total` в ответе
-- [ ] Реализация POST `/api/products`
-- [ ] Реализация DELETE `/api/products/:id`
-- [ ] Реализация DELETE `/api/products/bulk` (**зарегистрировать до `/:id`** в `products.js`)
-- [ ] Реализация POST `/api/auth/login` + `authMiddleware`
-- [ ] Настройка CORS между фронтом и бэком
+- [x] Инициализация Vite + Vue.js проекта (`frontend/`)
+- [x] Создание stub-компонентов для всех страниц (`HomePage.vue`, `CatalogPage.vue`, `AdminPage.vue`, `LoginPage.vue`) — пустые заглушки
+- [x] Настройка Vue Router (4 маршрута: /, /catalog, /admin, /admin/login) — подключить stub-компоненты
+- [x] Инициализация Node.js + Express проекта (`backend/`)
+- [x] Подключение SQLite, создание таблиц `products` и `categories`
+- [x] Наполнение БД тестовыми категориями и товарами
+- [x] Реализация GET/POST/DELETE `/api/categories`
+- [x] Реализация GET `/api/products` с фильтром по `category_id`, пагинацией (`limit`/`offset`) и полем `total` в ответе
+- [x] Реализация POST `/api/products`
+- [x] Реализация DELETE `/api/products/:id`
+- [x] Реализация DELETE `/api/products/bulk` (**зарегистрирован до `/:id`** в `products.js`)
+- [x] Реализация POST `/api/auth/login` + `authMiddleware`
+- [x] Настройка CORS между фронтом и бэком
 
 **Результат:** API работает, данные читаются и пишутся
 
 ---
 
-### 🎨 Sprint 2 — Дизайн-система
+### ✅ Sprint 2 — Дизайн-система *(выполнено: 2026-06-05)*
 **Цель:** CSS токены из Stitch, базовые компоненты по макетам Stitch
 
 > 📌 **Источники дизайна** (все в `design-reference/`):
@@ -294,34 +304,50 @@ shop/
 > - `main/code.html`, `catalog/code.html` — HTML-код страниц из Stitch
 
 **Задачи:**
-- [ ] Перенос цветов из `design-reference/design-tokens.yaml` в CSS переменные (`--color-bg: #121314` и т.д.)
-- [ ] Подключение Google Fonts: **Space Grotesk** (700) + **Inter** (400, 600)
-- [ ] CSS-классы типографики: `.headline-xl`, `.headline-lg`, `.headline-md`, `.body-lg`, `.label-sm`
-- [ ] Общие стили: нулевые радиусы, 1px границы, hover-переход 0.25s
-- [ ] Компонент `NavBar.vue` — лого из `logo/logo.png` + навигация, по макету `main/screen.png`
-- [ ] Компонент `Footer.vue` — по макету
-- [ ] Компонент `ProductCard.vue` — по макету `catalog/screen.png`
-- [ ] Компонент `CategoryFilter.vue` — фильтр-чипы по макету `catalog/screen.png`
-- [ ] Базовый responsive layout (мобилка + десктоп)
+- [x] Перенос цветов из `design-reference/design-tokens.yaml` в CSS переменные → `src/styles/tokens.css`
+- [x] Подключение Google Fonts: **Space Grotesk** (700) + **Inter** (400, 600) в `index.html`
+- [x] CSS-классы типографики: `.headline-xl/xl-mobile/lg/md`, `.body-lg/md`, `.label-sm` → `typography.css`
+- [x] Глобальный сброс: `border-radius: 0 !important`, `box-sizing`, body vars → `reset.css`
+- [x] Утилиты: `.container`, `.btn-primary`, `.btn-ghost`, `.input-underline`, `.divider` → `utilities.css`
+- [x] Компонент `NavBar.vue` — sticky 64px, 1px border-bottom, лого, `label-sm` навигация
+- [x] Компонент `Footer.vue` — 1px border-top, бренд + копирайт, responsive
+- [x] Компонент `ProductCard.vue` — `aspect-ratio: 4/5`, hover `scale(1.03)`, `computed displayImage`
+- [x] Компонент `CategoryFilter.vue` — чипы, active state, `emit('select')`, mobile horizontal scroll
+- [x] `App.vue` — чистый layout NavBar/RouterView/Footer, без инлайн-стилей
+- [x] Stub-страницы используют дизайн-систему: `.container`, `.headline-xl`, кнопки
+- [x] Hero-секция `HomePage.vue` — двухколоночный grid, `main-photo.png` справа (4:5)
+- [x] `public/logo.png`, `public/main-photo.png`, `public/favicon.svg` скопированы
+- [x] Responsive layout: 3→2→1 колонки, мобильные отступы 24px
 
-**Результат:** Дизайн-система готова, компоненты выглядят по Stitch
+**Ревью:** REVIEW_REPORT_v2 — 0 критических замечаний. 2 критических бага найдены в v1 и исправлены (computed reactivity, favicon 404), 2 рекомендации выполнены.
+
+**Результат:** Дизайн-система готова. Компоненты соответствуют макетам Stitch. Визуально: Editorial Brutalism, монохром, sharp shapes 0px.
 
 ---
 
-### 🏠 Sprint 3 — Публичные страницы
+### ✅ Sprint 3 — Публичные страницы *(выполнено: 2026-06-05)*
 **Цель:** Главная и каталог полностью рабочие
 
 **Задачи:**
-- [ ] `HomePage.vue` — Hero секция + динамическая сетка категорий из API (с фото + placeholder) + якорная секция «О НАС»
-- [ ] Обновить маршруты навбара: «О НАС» → якорная ссылка `/#about`
-- [ ] `CatalogPage.vue` — получение товаров из API, счётчик «N ПОЗИЦИЙ»
-- [ ] Фильтрация по категории (реактивно, без перезагрузки) — при смене фильтра сбрасывать `offset = 0`
-- [ ] Кнопка «ПОКАЗАТЬ ЕЩЁ» — догружает следующие 6 товаров (пагинация limit/offset), скрывается при `offset+limit >= total`
-- [ ] Клик по категории на главной → каталог уже отфильтрован
-- [ ] Анимации: hover на карточках, плавный переход фильтров
-- [ ] Состояние "товаров нет" (пустой каталог или фильтр)
+- [x] Vite proxy `/api` → `http://backend:3001` — единая точка API в приложении
+- [x] `composables/useApi.js` — `apiFetch`, `getCategories()`, `getProducts({categoryId, limit, offset})`
+- [x] Backend валидация: `?category_id=abc` → `400 Bad Request` (закрыт РЕК-2 из Sprint 1)
+- [x] `HomePage.vue` — Hero + динамическая сетка категорий из API (3 состояния: skeleton / ошибка / данные)
+- [x] `HomePage.vue` — секция `id="about"` (якорь для NavBar `«О нас»`)
+- [x] Клик по категории на главной → `/catalog?category=N` (фильтр применяется сразу)
+- [x] `NavBar.vue` — `«О нас»` → `RouterLink to="/#about" exact` (не `<a href>`)
+- [x] `CatalogPage.vue` — реальные товары из API, счётчик `N ПОЗИЦИЙ`
+- [x] Фильтрация по категории (реактивно, без перезагрузки) — `onCategorySelect` сбрасывает `offset = 0`
+- [x] Кнопка `«Показать ещё»` — пагинация limit/offset, `hasMore = computed(() => offset < total)`
+- [x] Открытие `/catalog?category=N` с уже применённым фильтром (`route.query.category`)
+- [x] Состояние «Товаров нет» + кнопка «Смотреть все»
+- [x] `TransitionGroup` — плавный fade при смене фильтра
+- [x] Skeleton-загрузчики на время загрузки (6 шт., анимация pulse)
+- [x] Параллельная загрузка `getCategories` + `loadProducts` через `Promise.all`
 
-**Результат:** Посетитель может просматривать и фильтровать товары
+**Ревью:** REVIEW_REPORT_v2 — 0 новых замечаний. 1 критическое (инлайн-стиль) + 2 рекомендации (параллелизм, exact) — все исправлены.
+
+**Результат:** Посетитель может просматривать и фильтровать товары. Главная страница показывает категории. Каталог работает с реальным API.
 
 ---
 
@@ -332,10 +358,11 @@ shop/
 - [ ] Страница `/admin/login` — форма логин + пароль
 - [ ] Создание `useAuth.js` composable — хранение токена в `localStorage`, методы `login()`, `logout()`, `getToken()`
 - [ ] Логика авторизации: POST `/api/auth/login` → получить JWT → сохранить через `useAuth.js`
-- [ ] Route guard во Vue Router — клиентская проверка наличия токена в `localStorage`, редирект на `/admin/login` если токена нет
+- [ ] **[РЕК-3 из ревью Sprint 1 — обязательно]** Route guard во Vue Router — `router.beforeEach`: если путь начинается с `/admin` (кроме `/admin/login`) и нет токена в `localStorage` → редирект на `/admin/login`
 - [ ] `AdminPage.vue` — две вкладки: «Категории» и «Товары»
 - [ ] Форма создания категории: название + URL обложки (необязательно) + превью
 - [ ] Список категорий с удалением (запрет если в ней есть товары)
+- [ ] **[РЕК-1 из ревью Sprint 1]** Редактирование категории: `PATCH /api/categories/:id` на бэкенде + форма редактирования в UI (переименовать категорию без удаления)
 - [ ] Форма добавления товара (название, описание, категория, картинка)
 - [ ] Выпадающий список категорий в форме товара (из API)
 - [ ] Поле URL картинки — валидация что URL не пустой
@@ -373,13 +400,13 @@ shop/
 
 | Спринт | Описание | Время |
 |---|---|---|
-| Sprint 0 | Docker-окружение | ~20 мин |
-| Sprint 1 | Фундамент | ~35 мин |
-| Sprint 2 | Дизайн-система | ~30 мин |
-| Sprint 3 | Публичные страницы | ~30 мин |
+| Sprint 0 | Docker-окружение | ✅ Готово |
+| Sprint 1 | Фундамент | ✅ Готово |
+| Sprint 2 | Дизайн-система | ✅ Готово |
+| Sprint 3 | Публичные страницы | ✅ Готово |
 | Sprint 4 | Админка | ~45 мин |
 | Sprint 5 | Деплой на Timeweb | ~30 мин |
-| **Итого** | | **~3ч 10 мин** |
+| **Итого** | | **~1ч 15 мин осталось** |
 
 ---
 
