@@ -1,0 +1,149 @@
+/* ─── 10:30 AM Shop — Utilities ──────────────────────────────────────────────
+   Переиспользуемые layout- и компонентные классы.
+   Sprint 2 — Дизайн-система
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Container — основная ширина с авто-отступами ──────────────────────── */
+.container {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-margin-desktop);
+}
+
+/* ─── Divider — горизонтальный разделитель 1px ───────────────────────────── */
+.divider {
+  height: 1px;
+  background-color: var(--color-outline-variant);
+  border: none;
+  margin: 0;
+}
+
+/* ─── Buttons — Primary ──────────────────────────────────────────────────────
+   Solid белый фон. CTA. Hover — инверсия: прозрачный + белая граница.    */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border: 1px solid var(--color-primary);
+
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-label-sm);
+  letter-spacing: var(--letter-spacing-label-sm);
+  text-transform: uppercase;
+  line-height: 1;
+
+  padding: 14px 32px;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-default),
+    color var(--transition-default),
+    border-color var(--transition-default);
+}
+
+.btn-primary:hover {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Buttons — Ghost ────────────────────────────────────────────────────────
+   Прозрачный фон, 1px граница outline-variant. Hover — белая граница.    */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background-color: transparent;
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-outline-variant);
+
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-label-sm);
+  letter-spacing: var(--letter-spacing-label-sm);
+  text-transform: uppercase;
+  line-height: 1;
+
+  padding: 14px 32px;
+  cursor: pointer;
+  transition:
+    color var(--transition-default),
+    border-color var(--transition-default);
+}
+
+.btn-ghost:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-ghost:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Input — underline only ─────────────────────────────────────────────────
+   Только нижняя граница (#444748). Focus → белая граница.                */
+.input-underline {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-outline-variant);
+  color: var(--color-on-surface);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: var(--font-size-body-md);
+  padding: 12px 0;
+  transition: border-color var(--transition-default);
+}
+
+.input-underline:focus {
+  outline: none;
+  border-bottom-color: var(--color-primary);
+}
+
+.input-underline::placeholder {
+  color: var(--color-on-surface-variant);
+}
+
+/* ─── Section — стандартный блок с section-gap ───────────────────────────── */
+.section {
+  padding: var(--spacing-section-gap) 0;
+}
+
+/* ─── Flex Utilities ─────────────────────────────────────────────────────── */
+.flex         { display: flex; }
+.flex-col     { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 8px; }
+.gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }
+.gap-4 { gap: 32px; }
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-margin-mobile);
+  }
+
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block; }
+  .section { padding: 64px 0; }
+}
+
+@media (min-width: 769px) {
+  .show-mobile { display: none; }
+}

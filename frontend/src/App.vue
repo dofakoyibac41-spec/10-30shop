@@ -1,8 +1,14 @@
 <template>
+  <!-- ─── Root App Layout ────────────────────────────────────────────────────
+       NavBar (sticky) → main → Footer.
+       Инлайн-стили Sprint 0/1 убраны — управление через глобальные CSS.
+       ─────────────────────────────────────────────────────────────────────── -->
   <NavBar />
-  <main>
+
+  <main class="app-main">
     <RouterView />
   </main>
+
   <Footer />
 </template>
 
@@ -12,26 +18,9 @@ import Footer from './components/Footer.vue';
 </script>
 
 <style>
-/* ─── Базовый сброс — Sprint 2 заменит на дизайн-токены ─── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background: #121314;
-  color: #e4e2e2;
-  font-family: 'Inter', system-ui, sans-serif;
-  min-height: 100vh;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-main {
-  padding: 24px;
+/* ─── App-level layout ───────────────────────────────────────────────────── */
+/* min-height гарантирует что footer прижат к низу при коротком контенте */
+.app-main {
+  min-height: calc(100vh - var(--navbar-height));
 }
 </style>

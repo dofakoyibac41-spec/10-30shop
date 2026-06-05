@@ -1,0 +1,113 @@
+/* ─── 10:30 AM Shop — Global Reset ──────────────────────────────────────────
+   Editorial Brutalism: нулевые радиусы, 1px границы, без теней.
+   Sprint 2 — Дизайн-система
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Box model ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* Ключевое правило стиля: Sharp shapes 0px — нет исключений */
+  border-radius: 0 !important;
+}
+
+/* ─── Базовый фон и текст ────────────────────────────────────────────────── */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-md);
+  line-height: var(--line-height-body-md);
+  letter-spacing: var(--letter-spacing-body-md);
+  min-height: 100vh;
+  /* Запрет выделения текста для интерактивных элементов — управляется локально */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Ссылки ─────────────────────────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+  /* Hover управляется на уровне компонента */
+}
+
+/* ─── Изображения ────────────────────────────────────────────────────────── */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  object-fit: cover;
+}
+
+/* ─── Кнопки ─────────────────────────────────────────────────────────────── */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  /* transitions управляются через utilities.css */
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ─── Формы ──────────────────────────────────────────────────────────────── */
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  /* Фокус-стиль управляется на уровне компонента */
+}
+
+/* ─── Списки ─────────────────────────────────────────────────────────────── */
+ul,
+ol {
+  list-style: none;
+}
+
+/* ─── Заголовки — убрать браузерные стили, управление через typography.css  */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* ─── Таблицы ────────────────────────────────────────────────────────────── */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ─── Глобальный transition для hover-эффектов ───────────────────────────── */
+/* Применяем только к цветовым свойствам — не к layout (избегаем FOUC) */
+a,
+button {
+  transition:
+    color var(--transition-default),
+    border-color var(--transition-default),
+    background-color var(--transition-default),
+    opacity var(--transition-default);
+}

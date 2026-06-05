@@ -1,0 +1,121 @@
+/* ─── 10:30 AM Shop — Design Tokens ─────────────────────────────────────────
+   Источник: design-reference/design-tokens.yaml
+   Стиль: Editorial Brutalism — монохромная палитра, нулевые радиусы
+   Sprint 2 — Дизайн-система
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ─── Цвета: поверхности ─────────────────────────────────────────────────── */
+  --color-surface:                    #121314;
+  --color-surface-dim:                #121314;
+  --color-surface-bright:             #393939;
+  --color-surface-container-lowest:   #0d0e0f;
+  --color-surface-container-low:      #1b1c1c;
+  --color-surface-container:          #1f2020;
+  --color-surface-container-high:     #292a2a;
+  --color-surface-container-highest:  #343535;
+
+  /* ─── Цвета: текст на поверхностях ──────────────────────────────────────── */
+  --color-on-surface:         #e4e2e2;
+  --color-on-surface-variant: #c4c7c8;
+  --color-inverse-surface:    #e4e2e2;
+  --color-inverse-on-surface: #303031;
+
+  /* ─── Цвета: контуры (1px границы) ──────────────────────────────────────── */
+  --color-outline:         #8e9192;
+  --color-outline-variant: #444748;  /* ← основной цвет 1px границ в UI */
+
+  /* ─── Цвета: основные ───────────────────────────────────────────────────── */
+  --color-primary:    #ffffff;       /* CTA, активные состояния */
+  --color-on-primary: #2f3131;       /* текст поверх primary */
+  --color-primary-container:    #e2e2e2;
+  --color-on-primary-container: #636565;
+  --color-inverse-primary: #5d5f5f;
+
+  /* ─── Цвета: вторичные ──────────────────────────────────────────────────── */
+  --color-secondary:            #c8c6c5;
+  --color-on-secondary:         #313030;
+  --color-secondary-container:  #474746;
+  --color-on-secondary-container: #b7b5b4;
+
+  /* ─── Цвета: третичные ──────────────────────────────────────────────────── */
+  --color-tertiary:            #ffffff;
+  --color-on-tertiary:         #303030;
+  --color-tertiary-container:  #e4e2e1;
+  --color-on-tertiary-container: #656464;
+
+  /* ─── Цвета: ошибки ─────────────────────────────────────────────────────── */
+  --color-error:            #ffb4ab;
+  --color-on-error:         #690005;
+  --color-error-container:  #93000a;
+  --color-on-error-container: #ffdad6;
+
+  /* ─── Цвета: фон ────────────────────────────────────────────────────────── */
+  --color-background:    #121314;
+  --color-on-background: #e4e2e2;
+  --color-surface-variant: #343535;
+  --color-surface-tint: #c6c6c7;
+
+  /* ─── Типографика: headline-xl (80px) ────────────────────────────────────
+     Используется для Hero-заголовков. Намеренно «вторгается» в макет.     */
+  --font-size-headline-xl:        80px;
+  --font-weight-headline-xl:      700;
+  --line-height-headline-xl:      1.0;
+  --letter-spacing-headline-xl:   -0.04em;
+
+  /* ─── Типографика: headline-xl-mobile (48px) ─────────────────────────── */
+  --font-size-headline-xl-mobile:       48px;
+  --font-weight-headline-xl-mobile:     700;
+  --line-height-headline-xl-mobile:     1.1;
+  --letter-spacing-headline-xl-mobile:  -0.04em;
+
+  /* ─── Типографика: headline-lg (48px) ───────────────────────────────────
+     Для заголовков секций.                                                  */
+  --font-size-headline-lg:       48px;
+  --font-weight-headline-lg:     700;
+  --line-height-headline-lg:     1.1;
+  --letter-spacing-headline-lg:  -0.02em;
+
+  /* ─── Типографика: headline-md (24px) ───────────────────────────────────
+     Для подзаголовков, названий товаров.                                    */
+  --font-size-headline-md:       24px;
+  --font-weight-headline-md:     600;
+  --line-height-headline-md:     1.2;
+  --letter-spacing-headline-md:  -0.01em;
+
+  /* ─── Типографика: body-lg (18px) ───────────────────────────────────────
+     Основной текст, описания.                                               */
+  --font-size-body-lg:      18px;
+  --font-weight-body-lg:    400;
+  --line-height-body-lg:    1.6;
+  --letter-spacing-body-lg: 0.01em;
+
+  /* ─── Типографика: body-md (16px) ───────────────────────────────────────
+     Вспомогательный текст.                                                  */
+  --font-size-body-md:      16px;
+  --font-weight-body-md:    400;
+  --line-height-body-md:    1.5;
+  --letter-spacing-body-md: 0em;
+
+  /* ─── Типографика: label-sm (12px) ──────────────────────────────────────
+     Ярлыки, теги, навигация — всегда uppercase. Имитирует промышленный тег
+     на одежде. letter-spacing: 0.1em обязателен.                           */
+  --font-size-label-sm:      12px;
+  --font-weight-label-sm:    600;
+  --line-height-label-sm:    1;
+  --letter-spacing-label-sm: 0.1em;
+
+  /* ─── Spacing: кратно 8px ────────────────────────────────────────────── */
+  --spacing-base:           8px;
+  --spacing-gutter:         24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-margin-mobile:  24px;
+  --spacing-section-gap:    120px;
+
+  /* ─── Layout ────────────────────────────────────────────────────────── */
+  --container-max: 1440px;
+  --navbar-height: 64px;   /* 8 × spacing-base */
+
+  /* ─── Transitions: единый стандарт ──────────────────────────────────── */
+  --transition-default: 0.25s ease-in-out;
+}

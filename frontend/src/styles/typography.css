@@ -1,0 +1,99 @@
+/* ─── 10:30 AM Shop — Typography ────────────────────────────────────────────
+   Утилитарные классы типографики из design-tokens.yaml.
+   Шрифты: Space Grotesk (заголовки) + Inter (текст).
+   Sprint 2 — Дизайн-система
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Headline XL — Hero-заголовки ──────────────────────────────────────────
+   80px. Намеренно «вторгается» в макет. Desktop only.
+   На мобилке использовать .headline-xl-mobile.                              */
+.headline-xl {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: var(--font-size-headline-xl);
+  font-weight: var(--font-weight-headline-xl);
+  line-height: var(--line-height-headline-xl);
+  letter-spacing: var(--letter-spacing-headline-xl);
+  color: var(--color-on-surface);
+}
+
+/* ─── Headline XL Mobile — Hero-заголовки на мобилке ────────────────────── */
+.headline-xl-mobile {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: var(--font-size-headline-xl-mobile);
+  font-weight: var(--font-weight-headline-xl-mobile);
+  line-height: var(--line-height-headline-xl-mobile);
+  letter-spacing: var(--letter-spacing-headline-xl-mobile);
+  color: var(--color-on-surface);
+}
+
+/* ─── Headline LG — Заголовки секций ──────────────────────────────────────
+   48px. «Разделы» страницы — категории, «О нас» и т.д.                    */
+.headline-lg {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: var(--font-size-headline-lg);
+  font-weight: var(--font-weight-headline-lg);
+  line-height: var(--line-height-headline-lg);
+  letter-spacing: var(--letter-spacing-headline-lg);
+  color: var(--color-on-surface);
+}
+
+/* ─── Headline MD — Подзаголовки, названия товаров ─────────────────────────
+   24px. Карточки товаров, названия блоков.                                 */
+.headline-md {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: var(--font-size-headline-md);
+  font-weight: var(--font-weight-headline-md);
+  line-height: var(--line-height-headline-md);
+  letter-spacing: var(--letter-spacing-headline-md);
+  color: var(--color-on-surface);
+}
+
+/* ─── Body LG — Основной текст ──────────────────────────────────────────────
+   18px Inter. Описания, основной контент.                                   */
+.body-lg {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-body-lg);
+  line-height: var(--line-height-body-lg);
+  letter-spacing: var(--letter-spacing-body-lg);
+  color: var(--color-on-surface);
+}
+
+/* ─── Body MD — Вспомогательный текст ───────────────────────────────────────
+   16px Inter. Мета-информация, вторичный контент.                          */
+.body-md {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-md);
+  line-height: var(--line-height-body-md);
+  letter-spacing: var(--letter-spacing-body-md);
+  color: var(--color-on-surface);
+}
+
+/* ─── Label SM — Ярлыки, теги, навигация ────────────────────────────────────
+   12px Inter 600. Всегда uppercase + широкий letter-spacing.
+   Имитирует промышленный ярлык на одежде — ключевой элемент стиля.        */
+.label-sm {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-label-sm);
+  line-height: var(--line-height-label-sm);
+  letter-spacing: var(--letter-spacing-label-sm);
+  text-transform: uppercase;
+  color: var(--color-on-surface);
+}
+
+/* ─── Цветовые модификаторы ──────────────────────────────────────────────── */
+.text-muted   { color: var(--color-on-surface-variant); }
+.text-primary { color: var(--color-primary); }
+.text-error   { color: var(--color-error); }
+
+/* ─── Responsive: headline-xl → headline-xl-mobile на мобилке ─────────────
+   Страницы используют .headline-xl и оно автоматически уменьшается.      */
+@media (max-width: 768px) {
+  .headline-xl {
+    font-size: var(--font-size-headline-xl-mobile);
+    line-height: var(--line-height-headline-xl-mobile);
+    letter-spacing: var(--letter-spacing-headline-xl-mobile);
+  }
+}
