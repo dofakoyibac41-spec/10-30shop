@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Prompt Builder</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0b0b12;
+      --surface: #13131f;
+      --surface2: #1a1a2e;
+      --border: #2a2a40;
+      --text: #e2e2f0;
+      --muted: #6b6b8a;
+      --planner: #6366f1;
+      --developer: #10b981;
+      --tester: #f59e0b;
+      --reviewer: #f43f5e;
+      --database: #0ea5e9;
+      --devops: #f97316;
+      --documenter: #a855f7;
+      --security: #ef4444;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .project-select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .project-select:focus {
+      border-color: #6366f1;
+    }
+
+    /* AGENT GRID */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .agent-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--agent-color);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .agent-card:hover {
+      border-color: var(--agent-color);
+      transform: translateY(-1px);
+    }
+
+    .agent-card:hover::before {
+      opacity: 1;
+    }
+
+    .agent-card.active {
+      border-color: var(--agent-color);
+      background: color-mix(in srgb, var(--agent-color) 8%, var(--surface));
+      box-shadow: 0 0 20px color-mix(in srgb, var(--agent-color) 20%, transparent);
+    }
+
+    .agent-card.active::before {
+      opacity: 1;
+    }
+
+    .agent-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .agent-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--agent-color);
+      letter-spacing: 0.5px;
+    }
+
+    .agent-desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .reviewer-version {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+
+    .reviewer-version span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--reviewer);
+    }
+
+    .ver-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .ver-btn:hover {
+      color: var(--reviewer);
+    }
+
+    /* BUILDER PANEL */
+    .builder-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .builder-panel.visible {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-agent-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* ATTACH FILES */
+    .attach-section {
+      margin-bottom: 16px;
+    }
+
+    .attach-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .attach-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .attach-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface2);
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .attach-tag:hover {
+      border-color: var(--agent-color);
+      color: var(--text);
+    }
+
+    .attach-tag.active {
+      border-color: var(--agent-color);
+      background: color-mix(in srgb, var(--agent-color) 12%, var(--surface2));
+      color: var(--text);
+    }
+
+    .attach-tag .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--tag-color);
+    }
+
+    /* TASK INPUT */
+    .task-section {
+      margin-bottom: 16px;
+    }
+
+    .task-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .task-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 12px 14px;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .task-input:focus {
+      border-color: var(--active-color, #6366f1);
+    }
+
+    .task-input::placeholder {
+      color: var(--muted);
+    }
+
+    /* OUTPUT */
+    .output-section {}
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .output-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--active-color, #6366f1);
+      color: white;
+    }
+
+    .copy-btn:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+
+    .copy-btn.copied {
+      background: #10b981;
+    }
+
+    .output-box {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 280px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .agents-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div>
+      <div class="header-title">⚡ Agent Prompt Builder</div>
+      <div class="header-sub">Генератор промтов для агентов</div>
+    </div>
+    <select class="project-select" id="projectSelect" onchange="onProjectChange()">
+    </select>
+  </div>
+
+  <div class="section-label">Выбери агента</div>
+  <div class="agents-grid" id="agentsGrid"></div>
+
+  <div class="builder-panel" id="builderPanel">
+    <div class="panel-header">
+      <span class="panel-agent-badge" id="panelBadge"></span>
+      <span class="panel-title" id="panelTitle"></span>
+    </div>
+
+    <div class="attach-section" id="attachSection" style="display:none">
+      <div class="attach-label">📎 Прикрепить файлы от агентов</div>
+      <div class="attach-tags" id="attachTags"></div>
+    </div>
+
+    <div class="task-section">
+      <div class="task-label">✏️ Твоя задача</div>
+      <textarea class="task-input" id="taskInput" placeholder="Опиши что нужно сделать..."
+        oninput="generatePrompt()"></textarea>
+    </div>
+
+    <div class="output-section">
+      <div class="output-header">
+        <div class="output-label">📋 Готовый промт</div>
+        <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">
+          <span>📋</span> Скопировать
+        </button>
+      </div>
+      <div class="output-box" id="outputBox"></div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-state-icon">🤖</div>
+    <p>Выбери агента выше чтобы начать</p>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // КОНФИГУРАЦИЯ ПРОЕКТОВ
+    // Добавляй новые проекты сюда
+    // ═══════════════════════════════════════════
+    const projects = {
+      '10-30shop': {
+        name: '10:30 AM Shop',
+        stack: 'Vue.js 3 + Vite + Express + SQLite + Docker',
+        currentProjectFile: 'CURRENT_PROJECT.md',
+        agentsPath: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/',
+        projectPath: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/',
+        backendPath: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/backend/',
+        frontendPath: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/frontend/',
+        paths: {
+          planner:  '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/10-30shop/planner/',
+          reviewer: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/10-30shop/reviewer/',
+          tester:   '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/10-30shop/tester/',
+          database: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/10-30shop/database/',
+          security: '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/10-30shop/security/',
+          devops:   '/home/reco/.gemini/antigravity/scratch/workspace/10-30shop/agent/10-30shop/devops/',
+        }
+      },
+
+      'app-center': {
+        name: 'App Center',
+        stack: 'FastAPI + Next.js + PostgreSQL + Docker',
+        currentProjectFile: 'CURRENT_PROJECT.md',
+        agentsPath: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/',
+        projectPath: '/home/reco/.gemini/antigravity/scratch/workspace/ai-auto/',
+        backendPath: '/home/reco/.gemini/antigravity/scratch/workspace/ai-auto/backend/',
+        frontendPath: '/home/reco/.gemini/antigravity/scratch/workspace/ai-auto/frontend/',
+        paths: {
+          planner: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/planner/',
+          reviewer: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/reviewer/',
+          tester: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/tester/',
+          database: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/database/',
+          security: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/security/',
+        }
+      },
+
+      'scheduler-app-001': {
+        name: 'App 001 — Scheduler',
+        stack: 'FastAPI + Jinja2 HTML + PostgreSQL + Docker',
+        currentProjectFile: 'CURRENT_PROJECT_APP.md',
+        agentsPath: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/',
+        projectPath: '/home/reco/.gemini/antigravity/scratch/workspace/ai-auto/apps/app-001/',
+        appPath: '/home/reco/.gemini/antigravity/scratch/workspace/ai-auto/apps/app-001/app/',
+        paths: {
+          planner: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/apps/App 001 — Scheduler/planner/',
+          reviewer: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/apps/App 001 — Scheduler/reviewer/',
+          tester: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/apps/App 001 — Scheduler/tester/',
+          database: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/apps/App 001 — Scheduler/database/',
+          security: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/app-center/apps/App 001 — Scheduler/security/',
+        }
+      },
+
+      'oracle-v2': {
+        name: 'Oracle v2 (архив)',
+        stack: 'FastAPI + Next.js',
+        currentProjectFile: 'CURRENT_PROJECT.md',
+        agentsPath: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/',
+        projectPath: '/home/reco/.gemini/antigravity/scratch/workspace/Test/oracle-v2/',
+        backendPath: '/home/reco/.gemini/antigravity/scratch/workspace/Test/oracle-v2/backend/',
+        frontendPath: '/home/reco/.gemini/antigravity/scratch/workspace/Test/oracle-v2/frontend/',
+        paths: {
+          planner: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/oracle-v2/planner/',
+          reviewer: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/oracle-v2/reviewer/',
+          tester: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/oracle-v2/tester/',
+          database: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/oracle-v2/database/',
+          security: '/home/reco/.gemini/antigravity/scratch/workspace/_agents/projects/oracle-v2/security/',
+        }
+      }
+    };
+
+    // ═══════════════════════════════════════════
+    // АГЕНТЫ — шаблоны и конфигурация
+    // ═══════════════════════════════════════════
+    const agents = [
+      {
+        id: 'planner', name: 'PLANNER', icon: '📋', color: '#6366f1',
+        role: 'Планировщик задач',
+        attachable: [],
+        template: (p, task, files, ver) =>
+          `Ты планировщик.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_PLANNER.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+Задача:
+${task || '[опиши что нужно реализовать]'}
+
+Создай TASKS.md и сохрани в:
+${p.paths.planner}TASKS.md`
+      },
+      {
+        id: 'developer', name: 'DEVELOPER', icon: '🛠️', color: '#10b981',
+        role: 'Разработчик кода',
+        attachable: ['planner', 'reviewer', 'database'],
+        template: (p, task, files, ver) =>
+          `Ты разработчик.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_DEVELOPER.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+Задача:
+${task || '[опиши что нужно реализовать]'}`
+      },
+      {
+        id: 'tester', name: 'TESTER', icon: '🧪', color: '#f59e0b',
+        role: 'QA / Тестировщик',
+        attachable: ['planner', 'reviewer'],
+        template: (p, task, files, ver) =>
+          `Ты тестировщик.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_TESTER.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+Напиши тесты для:
+${task || '[укажи что тестировать]'}
+
+Сохрани TEST_REPORT.md в:
+${p.paths.tester}TEST_REPORT.md`
+      },
+      {
+        id: 'reviewer', name: 'REVIEWER', icon: '🔍', color: '#f43f5e',
+        role: 'Ревьюер / Архитектор',
+        attachable: ['planner'],
+        template: (p, task, files, ver) =>
+          `Ты ревьюер.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_REVIEWER.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+${task ? `Проверь следующее:\n${task}` : `Сделай полный аудит проекта по пяти уровням.`}
+
+Не верь отчётам агентов — читай реальный код через view_file.
+
+Сохрани отчёт в:
+${p.paths.reviewer}REVIEW_REPORT_v${ver}.md`
+      },
+      {
+        id: 'database', name: 'DATABASE', icon: '🗄️', color: '#0ea5e9',
+        role: 'Архитектор БД',
+        attachable: ['planner'],
+        template: (p, task, files, ver) =>
+          `Ты архитектор базы данных.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_DATABASE.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+Задача:
+${task || '[опиши что нужно спроектировать]'}
+
+Сохрани рекомендации в:
+${p.paths.database}DB_DESIGN.md`
+      },
+      {
+        id: 'devops', name: 'DEVOPS', icon: '🚀', color: '#f97316',
+        role: 'Инфраструктура и деплой',
+        attachable: [],
+        template: (p, task, files, ver) =>
+          `Ты DevOps инженер.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_DEVOPS.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+Задача:
+${task || '[опиши задачу по инфраструктуре]'}`
+      },
+      {
+        id: 'documenter', name: 'DOCUMENTER', icon: '📖', color: '#a855f7',
+        role: 'Технический писатель',
+        attachable: ['planner'],
+        template: (p, task, files, ver) =>
+          `Ты технический писатель.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_DOCUMENTER.md
+- ${p.agentsPath}${p.currentProjectFile}
+${files}
+${task || '[опиши что нужно задокументировать]'}
+
+Обнови README.md и CHANGELOG.md в:
+${p.projectPath}`
+      },
+      {
+        id: 'security', name: 'SECURITY', icon: '🔒', color: '#ef4444',
+        role: '⚠️ Только перед релизом',
+        attachable: [],
+        template: (p, task, files, ver) =>
+          `Ты аудитор безопасности.
+Прочитай эти файлы:
+- ${p.agentsPath}AGENT_SECURITY.md
+- ${p.agentsPath}${p.currentProjectFile}
+
+Проведи полный аудит по OWASP Top 10.
+${task ? `\nДополнительно проверь:\n${task}` : ''}
+
+Сохрани отчёт в:
+${p.paths.security}SECURITY_REPORT.md`
+      }
+    ];
+
+    // ═══════════════════════════════════════════
+    // СОСТОЯНИЕ
+    // ═══════════════════════════════════════════
+    let state = {
+      projectId: '10-30shop',
+      agentId: null,
+      attachedFiles: new Set(),
+      reviewerVersion: 1
+    };
+
+    // ═══════════════════════════════════════════
+    // ИНИЦИАЛИЗАЦИЯ
+    // ═══════════════════════════════════════════
+    function init() {
+      // Заполнить select проектов
+      const sel = document.getElementById('projectSelect');
+      Object.entries(projects).forEach(([id, p]) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = `${p.name} — ${p.stack}`;
+        if (id === state.projectId) opt.selected = true;
+        sel.appendChild(opt);
+      });
+
+      // Построить карточки агентов
+      const grid = document.getElementById('agentsGrid');
+      agents.forEach(agent => {
+        const card = document.createElement('div');
+        card.className = 'agent-card';
+        card.id = `card-${agent.id}`;
+        card.style.setProperty('--agent-color', agent.color);
+        card.onclick = () => selectAgent(agent.id);
+
+        let reviewerExtra = agent.id === 'reviewer' ? `
+      <div class="reviewer-version">
+        <button class="ver-btn" onclick="changeVersion(-1, event)">−</button>
+        <span id="verDisplay">v1</span>
+        <button class="ver-btn" onclick="changeVersion(1, event)">+</button>
+      </div>` : '';
+
+        card.innerHTML = `
+      ${reviewerExtra}
+      <span class="agent-icon">${agent.icon}</span>
+      <div class="agent-name">${agent.name}</div>
+      <div class="agent-desc">${agent.role}</div>
+    `;
+        grid.appendChild(card);
+      });
+    }
+
+    function onProjectChange() {
+      state.projectId = document.getElementById('projectSelect').value;
+      state.attachedFiles.clear();
+      generatePrompt();
+    }
+
+    function changeVersion(delta, e) {
+      e.stopPropagation();
+      state.reviewerVersion = Math.max(1, state.reviewerVersion + delta);
+      document.getElementById('verDisplay').textContent = `v${state.reviewerVersion}`;
+      generatePrompt();
+    }
+
+    function selectAgent(id) {
+      state.agentId = id;
+      state.attachedFiles.clear();
+
+      // Update card styles
+      agents.forEach(a => {
+        const card = document.getElementById(`card-${a.id}`);
+        card.classList.toggle('active', a.id === id);
+      });
+
+      const agent = agents.find(a => a.id === id);
+      const p = projects[state.projectId];
+
+      // Panel badge
+      const badge = document.getElementById('panelBadge');
+      badge.textContent = agent.name;
+      badge.style.background = `color-mix(in srgb, ${agent.color} 15%, #13131f)`;
+      badge.style.color = agent.color;
+      badge.style.border = `1px solid ${agent.color}`;
+
+      document.getElementById('panelTitle').textContent = agent.role;
+
+      // Active color for task input focus and copy btn
+      document.documentElement.style.setProperty('--active-color', agent.color);
+      document.getElementById('copyBtn').style.background = agent.color;
+
+      // Attach tags
+      const attachSection = document.getElementById('attachSection');
+      const attachTags = document.getElementById('attachTags');
+      attachTags.innerHTML = '';
+
+      if (agent.attachable.length > 0) {
+        attachSection.style.display = 'block';
+        agent.attachable.forEach(fromId => {
+          const fromAgent = agents.find(a => a.id === fromId);
+          const tag = document.createElement('div');
+          tag.className = 'attach-tag';
+          tag.id = `tag-${fromId}`;
+          tag.style.setProperty('--agent-color', agent.color);
+
+          let filename = getOutputFile(fromId);
+          tag.innerHTML = `<span class="dot" style="background:${fromAgent.color}"></span>${fromAgent.name} → ${filename}`;
+          tag.onclick = () => toggleAttach(fromId, tag, fromAgent, p);
+          attachTags.appendChild(tag);
+        });
+      } else {
+        attachSection.style.display = 'none';
+      }
+
+      // Clear task
+      document.getElementById('taskInput').value = '';
+
+      // Show panel
+      document.getElementById('builderPanel').classList.add('visible');
+      document.getElementById('emptyState').style.display = 'none';
+
+      generatePrompt();
+    }
+
+    function getOutputFile(agentId) {
+      const map = {
+        planner: 'TASKS.md',
+        reviewer: `REVIEW_REPORT_v${state.reviewerVersion}.md`,
+        tester: 'TEST_REPORT.md',
+        database: 'DB_DESIGN.md',
+        security: 'SECURITY_REPORT.md'
+      };
+      return map[agentId] || '';
+    }
+
+    function toggleAttach(fromId, tagEl, fromAgent, p) {
+      if (state.attachedFiles.has(fromId)) {
+        state.attachedFiles.delete(fromId);
+        tagEl.classList.remove('active');
+      } else {
+        state.attachedFiles.add(fromId);
+        tagEl.classList.add('active');
+      }
+      generatePrompt();
+    }
+
+    function buildAttachedFiles(p) {
+      if (state.attachedFiles.size === 0) return '';
+      let lines = ['Также прочитай:'];
+      state.attachedFiles.forEach(fromId => {
+        const file = getOutputFile(fromId);
+        const path = p.paths[fromId] || '';
+        lines.push(`- ${path}${file}`);
+      });
+      return lines.join('\n');
+    }
+
+    function generatePrompt() {
+      if (!state.agentId) return;
+      const agent = agents.find(a => a.id === state.agentId);
+      const p = projects[state.projectId];
+      const task = document.getElementById('taskInput').value.trim();
+      const files = buildAttachedFiles(p);
+      const prompt = agent.template(p, task, files, state.reviewerVersion);
+      document.getElementById('outputBox').textContent = prompt;
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('outputBox').textContent;
+      if (!text) return;
+
+      // Метод работает без HTTPS и localhost (file:// протокол)
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = '<span>✅</span> Скопировано!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<span>📋</span> Скопировать';
+          btn.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        // Если и это не сработало — выделяем текст для ручного копирования
+        document.getElementById('outputBox').focus();
+        window.getSelection().selectAllChildren(document.getElementById('outputBox'));
+        alert('Выдели текст в поле промта и нажми Ctrl+C');
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+
+    init();
+  </script>
+</body>
+
+</html>

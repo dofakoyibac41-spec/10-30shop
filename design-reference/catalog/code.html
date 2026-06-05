@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>КАТАЛОГ - 10:30 AM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1b1c1c",
+                        "primary": "#ffffff",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-primary-fixed-variant": "#454747",
+                        "inverse-primary": "#5d5f5f",
+                        "secondary": "#c8c6c5",
+                        "outline": "#8e9192",
+                        "outline-variant": "#444748",
+                        "surface": "#121314",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "secondary-container": "#474746",
+                        "on-secondary-container": "#b7b5b4",
+                        "surface-variant": "#343535",
+                        "on-background": "#e4e2e2",
+                        "surface-container": "#1f2020",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#303031",
+                        "on-surface-variant": "#c4c7c8",
+                        "surface-dim": "#121314",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "background": "#121314",
+                        "primary-fixed-dim": "#c6c6c7",
+                        "surface-container-highest": "#343535",
+                        "surface-container-lowest": "#0d0e0f",
+                        "surface-container-high": "#292a2a",
+                        "on-surface": "#e4e2e2",
+                        "primary-fixed": "#e2e2e2",
+                        "on-primary": "#2f3131",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#656464",
+                        "on-secondary": "#313030",
+                        "surface-tint": "#c6c6c7",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-primary-fixed": "#1a1c1c",
+                        "primary-container": "#e2e2e2",
+                        "tertiary-container": "#e4e2e1",
+                        "on-primary-container": "#636565",
+                        "on-tertiary": "#303030",
+                        "inverse-surface": "#e4e2e2",
+                        "error-container": "#93000a",
+                        "tertiary": "#ffffff",
+                        "surface-bright": "#393939",
+                        "tertiary-fixed": "#e4e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-mobile": "24px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "section-gap": "120px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-xl-mobile": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-xl-mobile": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["80px", {"lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #111111;
+            color: #ffffff;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-hover:hover {
+            border-color: #ffffff !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        .card-hover:hover .hover-action {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hover-action {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pt-[80px]">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-[#2E2E2E]">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-[80px] max-w-[1440px] mx-auto">
+<a class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tighter" href="#">
+                10:30 AM
+            </a>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">
+                    ГЛАВНАЯ
+                </a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-primary dark:text-primary scale-100 hover:scale-[1.02] transition-transform relative after:content-[''] after:absolute after:-bottom-[30px] after:left-0 after:w-full after:h-[1px] after:bg-primary" href="#">
+                    КАТАЛОГ
+                </a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">
+                    О НАС
+                </a>
+</div>
+<div class="md:hidden flex items-center">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+</div>
+</nav>
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-16">
+<!-- Page Header -->
+<header class="mb-12">
+<h1 class="font-headline-xl-mobile md:font-headline-lg text-headline-xl-mobile md:text-headline-lg text-primary uppercase mb-2">КАТАЛОГ</h1>
+<p class="font-body-md text-body-md text-on-surface-variant uppercase tracking-widest">24 позиции</p>
+</header>
+<!-- Filter Bar -->
+<div class="w-full border-b border-[#2E2E2E] pb-6 mb-12 flex flex-wrap gap-4 items-center">
+<button class="px-6 py-2 bg-primary text-[#111111] font-label-sm text-label-sm uppercase tracking-widest border border-primary transition-colors duration-300">ВСЕ</button>
+<button class="px-6 py-2 bg-transparent text-on-surface-variant font-label-sm text-label-sm uppercase tracking-widest border border-[#2E2E2E] hover:border-primary hover:text-primary transition-colors duration-300">ФУТБОЛКИ</button>
+<button class="px-6 py-2 bg-transparent text-on-surface-variant font-label-sm text-label-sm uppercase tracking-widest border border-[#2E2E2E] hover:border-primary hover:text-primary transition-colors duration-300">КУРТКИ</button>
+<button class="px-6 py-2 bg-transparent text-on-surface-variant font-label-sm text-label-sm uppercase tracking-widest border border-[#2E2E2E] hover:border-primary hover:text-primary transition-colors duration-300">БРЮКИ</button>
+<button class="px-6 py-2 bg-transparent text-on-surface-variant font-label-sm text-label-sm uppercase tracking-widest border border-[#2E2E2E] hover:border-primary hover:text-primary transition-colors duration-300">АКСЕССУАРЫ</button>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Product Card 1 -->
+<article class="bg-[#1A1A1A] border border-[#2E2E2E] card-hover group cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+<div class="w-full aspect-square relative bg-[#111111] overflow-hidden border-b border-[#2E2E2E] group-hover:border-transparent transition-colors">
+<img alt="Product Image" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" data-alt="A stark, minimalist editorial photograph of a modern black jacket on a stark gray background. High-contrast lighting casts sharp shadows, emphasizing the technical fabric texture and structural silhouette. The composition is rigid and brutalist, aligning with a post-luxury streetwear aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLvZXhfbxUoXHJ9_2ah_gH0zq50xcPb9OS1lHZftB9vn03YlNQ_qiu_Og5n-6kSNh17y54O_sDL3XB4FSgZdBjyC4EL7D-HwEKiRqedV2sDvpZ40WkvMIdNUU8MlcdvZzcyuN-rwcz6TGF9IxyosJgNGHLBJHFeRRq4mmzs0sp-1-NegTaKPB0VMd3BW31suviq51ggpshP1xCOBQcT9bTrIcdBTS0tWiW5crGvFhR8HlNZtPt1hE1jvvgM"/>
+<div class="absolute top-4 left-4 border border-[#2E2E2E] bg-[#111111]/80 backdrop-blur-sm px-3 py-1">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">КУРТКИ</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow relative">
+<h3 class="font-body-lg text-body-lg text-primary uppercase mb-2 group-hover:-translate-y-1 transition-transform">STRUCTURE BOMBER 01</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Доступно</p>
+<div class="absolute bottom-6 left-6 hover-action flex items-center gap-2 text-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ПОДРОБНЕЕ</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Product Card 2 -->
+<article class="bg-[#1A1A1A] border border-[#2E2E2E] card-hover group cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+<div class="w-full aspect-square relative bg-[#111111] overflow-hidden border-b border-[#2E2E2E] group-hover:border-transparent transition-colors">
+<img alt="Product Image" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" data-alt="A stark, minimalist editorial photograph of a modern white t-shirt on a stark black background. High-contrast lighting casts sharp shadows, emphasizing the technical fabric texture and structural silhouette. The composition is rigid and brutalist, aligning with a post-luxury streetwear aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLtU58fRcrlC8E_eSbfiXM3mKJulR5BErz9Zq-tuLH5umI96ekbRvlA04268jCL9K05o677DukfPXuEi8ot1J6aUWifX78gm9vzMHBzfTlELSjIWC1oZMBcQUXHJ8K4NxX6uFYCnFZXtPGg1pzZmW-3mPsyI2AQ48bqe_V3bcTnSQ-XEs-QYCblvOHj-CDdo93bBA6hCL6wqDxydWodaelpr_udJ_wjHqwjbHUReo-CG1wncJcfqBkTSnQ"/>
+<div class="absolute top-4 left-4 border border-[#2E2E2E] bg-[#111111]/80 backdrop-blur-sm px-3 py-1">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">ФУТБОЛКИ</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow relative">
+<h3 class="font-body-lg text-body-lg text-primary uppercase mb-2 group-hover:-translate-y-1 transition-transform">HEAVYWEIGHT TEE</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Доступно</p>
+<div class="absolute bottom-6 left-6 hover-action flex items-center gap-2 text-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ПОДРОБНЕЕ</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Product Card 3 -->
+<article class="bg-[#1A1A1A] border border-[#2E2E2E] card-hover group cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+<div class="w-full aspect-square relative bg-[#111111] overflow-hidden border-b border-[#2E2E2E] group-hover:border-transparent transition-colors">
+<img alt="Product Image" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" data-alt="A stark, minimalist editorial photograph of modern black technical pants on a concrete background. High-contrast lighting casts sharp shadows, emphasizing the technical fabric texture and structural silhouette. The composition is rigid and brutalist, aligning with a post-luxury streetwear aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLsdnHmEiwW4s1Wm1oXwyiIfJu7ieIjRH-Fl2hHaGfs4G0MudZa1Qp3HO1Mpt_TjtYnQhXFo2y2e-TW9_Kem8ixoQlh0V0byzk9xUg2ZOTLH7cCmSTrqCCb7Izfae3zezsWKX_r-noaqFztEZjfLJCn4BQ3cYQDmnpV1k9vcxPZ2mjIKq8Mlur6fmw5fsFVWjNrN9whyzRdzCTbJ8lI5sTiOF3k9DpZ6tx6qJzAongz-wDtwCz0yzQREQhQ"/>
+<div class="absolute top-4 left-4 border border-[#2E2E2E] bg-[#111111]/80 backdrop-blur-sm px-3 py-1">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">БРЮКИ</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow relative">
+<h3 class="font-body-lg text-body-lg text-primary uppercase mb-2 group-hover:-translate-y-1 transition-transform">CARGO PANT 02</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Доступно</p>
+<div class="absolute bottom-6 left-6 hover-action flex items-center gap-2 text-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ПОДРОБНЕЕ</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Product Card 4 -->
+<article class="bg-[#1A1A1A] border border-[#2E2E2E] card-hover group cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+<div class="w-full aspect-square relative bg-[#111111] overflow-hidden border-b border-[#2E2E2E] group-hover:border-transparent transition-colors">
+<img alt="Product Image" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" data-alt="A stark, minimalist editorial photograph of a modern black beanie accessory on a stark gray background. High-contrast lighting casts sharp shadows, emphasizing the technical fabric texture and structural silhouette. The composition is rigid and brutalist, aligning with a post-luxury streetwear aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLvSmuQj2dvFrOBsElAI5DJW-7KYTnp-qAiGfqE01SHcPgRif8yaFStT-lG8w2Y9zXW24q0IH_kSj4pudUp-rDtWTxkFaPwYmohiPaQ98AKHmU9M44q_2oD31ZNfbzXKp225utIe95zqqATtVMIYuBTYrIxN4jCCgZvTr1pGYGE7MPojKxZjNWUM2nCEeAJwfu2pR0fKZH7EE2r9YKNNDgaKCfU_GlRO0qY7fAtxSZT6jW9TXn-3OTARKbk"/>
+<div class="absolute top-4 left-4 border border-[#2E2E2E] bg-[#111111]/80 backdrop-blur-sm px-3 py-1">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">АКСЕССУАРЫ</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow relative">
+<h3 class="font-body-lg text-body-lg text-primary uppercase mb-2 group-hover:-translate-y-1 transition-transform">KNIT BEANIE</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Доступно</p>
+<div class="absolute bottom-6 left-6 hover-action flex items-center gap-2 text-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ПОДРОБНЕЕ</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Product Card 5 -->
+<article class="bg-[#1A1A1A] border border-[#2E2E2E] card-hover group cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+<div class="w-full aspect-square relative bg-[#111111] overflow-hidden border-b border-[#2E2E2E] group-hover:border-transparent transition-colors">
+<img alt="Product Image" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" data-alt="A stark, minimalist editorial photograph of a modern black jacket draped over a concrete plinth. High-contrast lighting casts sharp shadows, emphasizing the technical fabric texture and structural silhouette. The composition is rigid and brutalist, aligning with a post-luxury streetwear aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLu_J1MVhnomML7KcINg8XZlspPopBi-UUBKssLN1pUXgoYIMG8qZ2bDeloZRK785L3IbNtgkGiW6ql7uP88jifZL05A-BhoqJ9-sHsv9h8fbEePdpjBOYqVlbVXh2i9hq_mzcAOG5ytbfjaAZeKllXeuuSxJn7NeU5NX-g2EaPPLWwP3dNr0-ctDTR7qdhSiLSAQXF9k9HZ7o7OppD0BhmXZSw0sWkPykbuNcm2Eu6LIPxH3MxQNMI5YA"/>
+<div class="absolute top-4 left-4 border border-[#2E2E2E] bg-[#111111]/80 backdrop-blur-sm px-3 py-1">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">КУРТКИ</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow relative">
+<h3 class="font-body-lg text-body-lg text-primary uppercase mb-2 group-hover:-translate-y-1 transition-transform">SHELL JACKET 03</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Доступно</p>
+<div class="absolute bottom-6 left-6 hover-action flex items-center gap-2 text-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ПОДРОБНЕЕ</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Product Card 6 -->
+<article class="bg-[#1A1A1A] border border-[#2E2E2E] card-hover group cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+<div class="w-full aspect-square relative bg-[#111111] overflow-hidden border-b border-[#2E2E2E] group-hover:border-transparent transition-colors">
+<img alt="Product Image" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" data-alt="A stark, minimalist editorial photograph of a folded modern white t-shirt on a dark textured surface. High-contrast lighting casts sharp shadows, emphasizing the technical fabric texture and structural silhouette. The composition is rigid and brutalist, aligning with a post-luxury streetwear aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLu1j794_0zAIo3s4HErBssA9gTOc9rnWFVFZ3yg9F0J4_cduZm1h_bGPBS475InR38ZFOsDBPvuDQar4ZjbnRCZAlrkdKUY9z1S-IXyu8oMlMCAkeaPgwpOdjva98tC7FU8h2P_5zCuzua8lp1wgyg82jgvWHt7x_lGmDIlG3b-E5io5pUDm9QtGdglMrU7JREpNlmgT4-ghm3UbJCppjHeTmJ62zi_oAr6jWyvbuDU-6iJBc0Mg1jSSW0"/>
+<div class="absolute top-4 left-4 border border-[#2E2E2E] bg-[#111111]/80 backdrop-blur-sm px-3 py-1">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">ФУТБОЛКИ</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow relative">
+<h3 class="font-body-lg text-body-lg text-primary uppercase mb-2 group-hover:-translate-y-1 transition-transform">ESSENTIAL TEE</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Доступно</p>
+<div class="absolute bottom-6 left-6 hover-action flex items-center gap-2 text-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ПОДРОБНЕЕ</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+</div>
+<div class="w-full flex justify-center mt-16">
+<button class="px-8 py-3 bg-transparent text-primary font-label-sm text-label-sm uppercase tracking-widest border border-[#2E2E2E] hover:border-primary transition-all duration-300 ease-in-out">ПОКАЗАТЬ ЕЩЕ</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-surface w-full py-section-gap border-t border-outline-variant mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center px-margin-mobile md:px-margin-desktop gap-base max-w-[1440px] mx-auto w-full">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tighter mb-8 md:mb-0">
+                10:30 AM
+            </div>
+<div class="flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-12">
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 opacity-100 hover:opacity-80" href="#">INSTAGRAM</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 opacity-100 hover:opacity-80" href="#">TIKTOK</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 opacity-100 hover:opacity-80" href="#">TWITTER</a>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm mt-4 md:mt-0">
+                    © 2024 10:30 AM. ALL RIGHTS RESERVED.
+                </div>
+</div>
+</div>
+</footer>
+</body></html>

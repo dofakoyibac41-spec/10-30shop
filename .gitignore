@@ -1,0 +1,31 @@
+# ─── Git Ignore — 10:30 AM Shop ──────────────────────────────────────────────
+
+# ─── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# ─── Environment (секретные данные — никогда не в git) ───────────────────────
+backend/.env
+*.env
+.env.local
+.env.production
+
+# ─── SQLite Database ─────────────────────────────────────────────────────────
+backend/db/shop.db
+backend/db/*.db
+*.db
+*.sqlite
+
+# ─── Build Artifacts ─────────────────────────────────────────────────────────
+frontend/dist/
+frontend/.vite/
+
+# ─── OS & Editor ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.log

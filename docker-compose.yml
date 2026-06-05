@@ -1,0 +1,61 @@
+# ─── Docker Compose — 10:30 AM Shop ─────────────────────────────────────────
+# name: 1030shop — изоляция от других проектов в Docker Desktop.
+# Все контейнеры получат префикс "1030shop-".
+#
+# Запуск:    docker compose up --build
+# Остановка: docker compose down
+# Логи:      docker compose logs -f
+
+name: 1030shop
+
+services:
+
+  # ─── Backend: Node.js + Express + SQLite ──────────────────────────────────
+  backend:
+    container_name: 1030shop-backend
+    build: ./backend
+    ports:
+      - "3001:3001"
+    volumes:
+      # Монтируем код — hot-reload работает без пересборки образа
+      - ./backend:/app
+      # Named volume для SQLite — данные не теряются при перезапуске
+      - 1030shop-db:/app/db
+      # [РЕ-2] Анонимный volume — node_modules контейнера НЕ перезаписываются с хоста
+      # Аналогично frontend: хост-машина может не иметь node_modules или иметь другую версию
+      - /app/node_modules
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ─── Frontend: Vue.js 3 + Vite ────────────────────────────────────────────
+  frontend:
+    container_name: 1030shop-frontend
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      # Монтируем код — HMR (Hot Module Replacement) работает без пересборки
+      - ./frontend:/app
+      # Анонимный volume — node_modules контейнера НЕ перезаписывается с хоста
+      - /app/node_modules
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - backend
+
+# ─── Named Volumes ────────────────────────────────────────────────────────────
+volumes:
+  # SQLite база данных — хранится в Docker Volume, не в файловой системе хоста
+  # Данные сохраняются между docker compose down / up
+  1030shop-db:
+    name: 1030shop-db
