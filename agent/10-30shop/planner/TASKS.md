@@ -541,17 +541,17 @@ function showToast(message, type = 'success') {
 
 | ID | Задача | Агент | Статус |
 |----|--------|-------|--------|
-| DEV-1 | Backend: `PATCH /api/categories/:id` | DEVELOPER | ⏳ Ожидает |
-| DEV-2 | `useAuth.js` — `getAuthHeader()` | DEVELOPER | ⏳ Ожидает |
-| DEV-3 | `useApi.js` — `useAdminApi()` с 6 методами | DEVELOPER | ⏳ Ожидает |
-| DEV-4 | Router `beforeEach` guard | DEVELOPER | ⏳ Ожидает |
-| DEV-5 | `LoginPage.vue` — реальная авторизация | DEVELOPER | ⏳ Ожидает |
-| DEV-6 | `AdminPage.vue` — структура двух вкладок + logout | DEVELOPER | ⏳ Ожидает |
-| DEV-7 | `AdminPage.vue` — вкладка «Категории» | DEVELOPER | ⏳ Ожидает |
-| DEV-8 | `AdminPage.vue` — вкладка «Товары» | DEVELOPER | ⏳ Ожидает |
-| DEV-9 | Toast-уведомления + CSS стили | DEVELOPER | ⏳ Ожидает |
-| TEST-1 | Тестирование Sprint 4 | TESTER | ⏳ Ожидает |
-| REVIEW-1 | Финальное ревью Sprint 4 | REVIEWER | ⏳ Ожидает |
+| DEV-1 | Backend: `PATCH /api/categories/:id` | DEVELOPER | ✅ Готово |
+| DEV-2 | `useAuth.js` — `getAuthHeader()` | DEVELOPER | ✅ Готово |
+| DEV-3 | `useApi.js` — `useAdminApi()` с 6 методами | DEVELOPER | ✅ Готово |
+| DEV-4 | Router `beforeEach` guard | DEVELOPER | ✅ Готово |
+| DEV-5 | `LoginPage.vue` — реальная авторизация | DEVELOPER | ✅ Готово |
+| DEV-6 | `AdminPage.vue` — структура двух вкладок + logout | DEVELOPER | ✅ Готово |
+| DEV-7 | `AdminPage.vue` — вкладка «Категории» | DEVELOPER | ✅ Готово |
+| DEV-8 | `AdminPage.vue` — вкладка «Товары» | DEVELOPER | ✅ Готово |
+| DEV-9 | Toast-уведомления + CSS стили | DEVELOPER | ✅ Готово |
+| TEST-1 | Тестирование Sprint 4 | TESTER | ✅ Готово |
+| REVIEW-1 | Финальное ревью Sprint 4 | REVIEWER | ✅ Готово |
 
 ---
 

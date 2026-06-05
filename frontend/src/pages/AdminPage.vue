@@ -38,7 +38,7 @@
           </button>
         </div>
 
-        <div class="divider" style="margin: 0 0 40px;"></div>
+        <div class="divider divider--tabs"></div>
 
         <!-- ═══════════════════════════════════════════════════════════════════════
              ВКЛАДКА: КАТЕГОРИИ
@@ -78,7 +78,7 @@
             </button>
           </form>
 
-          <div class="divider" style="margin: 40px 0;"></div>
+          <div class="divider divider--section"></div>
 
           <!-- Список категорий -->
           <p class="label-sm text-muted admin-section-label">
@@ -198,7 +198,7 @@
             </button>
           </form>
 
-          <div class="divider" style="margin: 40px 0;"></div>
+          <div class="divider divider--section"></div>
 
           <!-- Панель массового удаления -->
           <div class="admin-bulk-bar">
@@ -278,8 +278,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter }                        from 'vue-router';
 import { useAuth }                          from '../composables/useAuth.js';
-import { useApi }                           from '../composables/useApi.js';
-import { useAdminApi }                      from '../composables/useApi.js';
+import { useApi, useAdminApi } from '../composables/useApi.js';
 
 const router  = useRouter();
 const { logout }                                 = useAuth();
@@ -684,6 +683,10 @@ onMounted(async () => {
 .admin-empty {
   padding: 48px 0;
 }
+
+/* ─── Divider-модификаторы (РЕК-4 — замена инлайн style=) ───────────────── */
+.divider--tabs    { margin: 0 0 40px; }
+.divider--section { margin: 40px 0; }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {

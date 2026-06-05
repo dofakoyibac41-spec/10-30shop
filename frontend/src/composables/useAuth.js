@@ -1,7 +1,7 @@
 // ─── useAuth composable ───────────────────────────────────────────────────────
-// Sprint 4 реализует полную логику авторизации:
-// login(), logout(), getToken(), isAuthenticated.
-// Сейчас — минимальный stub для подключения роутера.
+// Sprint 4: полная реализация авторизации через JWT + localStorage.
+// Методы: getToken(), isAuthenticated(), getAuthHeader(), login(), logout().
+// Все API-запросы к защищённым эндпоинтам используют getAuthHeader().
 
 export function useAuth() {
   const getToken = () => localStorage.getItem('token');

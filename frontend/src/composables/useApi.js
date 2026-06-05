@@ -1,8 +1,11 @@
 // ─── useApi.js — Централизованный HTTP-клиент ─────────────────────────────────
 // Sprint 3: публичные эндпоинты (categories, products)
-// Sprint 4 расширит методами auth и admin-операций
+// Sprint 4: добавлен useAdminApi() — 6 защищённых методов (цатегории + товары)
 // Все запросы идут через Vite proxy: /api/* → http://backend:3001/api/*
 // ─────────────────────────────────────────────────────────────────────────────
+
+// [РЕК-2 из ревью Sprint 4] import перенесён в начало файла (был в середине, строка 66)
+import { useAuth } from './useAuth.js';
 
 /**
  * Базовая функция fetch с обработкой HTTP-ошибок.
@@ -63,7 +66,6 @@ export function useApi() {
 // Использование:
 //   const { createCategory, updateCategory, deleteCategory,
 //           createProduct,  deleteProduct,  deleteProductsBulk } = useAdminApi()
-import { useAuth } from './useAuth.js';
 
 export function useAdminApi() {
   const { getAuthHeader } = useAuth();
