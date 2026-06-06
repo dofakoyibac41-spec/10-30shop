@@ -187,11 +187,12 @@ onMounted(async () => {
   margin-top: 48px;
 }
 
-/* ─── Сетка товаров: 3 колонки desktop, 2 tablet, 1 mobile ─────────────── */
+/* ─── Сетка товаров: auto-fit — нет пустых серых ячеек [БАГ-5] ────────── */
 .page-catalog__grid {
   margin-top: 32px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* auto-fit схлопывает пустые колонки — серого фона не будет */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1px;
   background-color: var(--color-outline-variant);
 }

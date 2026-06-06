@@ -178,10 +178,10 @@ function goToCatalog(categoryId) {
   margin-top: 24px;
 }
 
-/* ─── Сетка категорий: auto-fill — нет пустых ячеек [БАГ-2] ─────────────── */
+/* ─── Сетка категорий: auto-fit — нет пустых ячеек [БАГ-2] ─────────────── */
 .categories__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1px;
   background-color: var(--color-outline-variant);
 }

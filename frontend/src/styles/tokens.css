@@ -51,7 +51,7 @@
   --color-on-error-container: #ffdad6;
 
   /* ─── Цвета: фон ────────────────────────────────────────────────────────── */
-  --color-background:    #121314;
+  --color-background:    #1a1b1d;
   --color-on-background: #e4e2e2;
   --color-surface-variant: #343535;
   --color-surface-tint: #c6c6c7;
@@ -110,7 +110,7 @@
   --spacing-gutter:         24px;
   --spacing-margin-desktop: 64px;
   --spacing-margin-mobile:  24px;
-  --spacing-section-gap:    120px;
+  --spacing-section-gap:    60px;
 
   /* ─── Layout ────────────────────────────────────────────────────────── */
   --container-max: 1440px;
