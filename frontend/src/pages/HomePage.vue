@@ -136,8 +136,9 @@ function goToCatalog(categoryId) {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 80px;
-  padding-top: var(--spacing-section-gap);
-  padding-bottom: var(--spacing-section-gap);
+  /* [БАГ-1] section-gap=120px слишком много — уменьшено до 60px */
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .hero__text {
@@ -177,10 +178,10 @@ function goToCatalog(categoryId) {
   margin-top: 24px;
 }
 
-/* ─── Сетка категорий: 4 колонки desktop ────────────────────────────────── */
+/* ─── Сетка категорий: auto-fill — нет пустых ячеек [БАГ-2] ─────────────── */
 .categories__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1px;
   background-color: var(--color-outline-variant);
 }

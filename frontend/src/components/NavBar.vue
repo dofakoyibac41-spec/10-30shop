@@ -6,29 +6,41 @@
        ─────────────────────────────────────────────────────────────────────── -->
   <header class="navbar">
     <div class="navbar__inner">
-      <!-- Логотип -->
+      <!-- Логотип — текстовый [БАГ-6] -->
       <RouterLink to="/" class="navbar__logo" aria-label="На главную">
-        <img src="/logo.png" alt="10:30 AM" class="navbar__logo-img" />
+        10:30 AM
       </RouterLink>
 
       <!-- Навигация (скрыта на мобилке через .hide-mobile → display:none) -->
-      <!-- aria-hidden синхронизирован с видимостью через CSS media (Sprint 5 добавит гамбургер) -->
       <nav class="navbar__nav hide-mobile" aria-label="Основная навигация">
         <RouterLink to="/catalog" class="navbar__link label-sm">
           Каталог
         </RouterLink>
-        <!-- [РЕК-1 из ревью] exact — не подсвечивает ссылку как active на /catalog и других маршрутах -->
-        <RouterLink to="/#about" class="navbar__link label-sm" exact>
+        <!-- [БАГ-4] scrollToAbout — программный скролл к секции #about -->
+        <button class="navbar__link label-sm" @click="scrollToAbout">
           О нас
-        </RouterLink>
+        </button>
       </nav>
     </div>
   </header>
 </template>
 
 <script setup>
-// NavBar: роутинг через RouterLink, «О нас» → якорь /#about
-// Гамбургер для мобилки — Sprint 5
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+// [БАГ-4] «О нас» → главная + скролл к секции #about
+async function scrollToAbout() {
+  if (router.currentRoute.value.path !== '/') {
+    await router.push('/');
+  }
+  // Небольшая задержка чтобы DOM успел отрендериться после смены маршрута
+  setTimeout(() => {
+    const el = document.getElementById('about');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
 </script>
 
 <style scoped>
@@ -54,17 +66,17 @@
   justify-content: space-between;
 }
 
-/* ─── Лого ───────────────────────────────────────────────────────────────── */
+/* ─── Лого (текстовый) [БАГ-6] ──────────────────────────────────────────── */
 .navbar__logo {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-}
-
-.navbar__logo-img {
-  height: 32px;
-  width: auto;
-  object-fit: contain;
+  font-size: var(--fs-label-sm);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-family: inherit;
 }
 
 /* ─── Навигация ──────────────────────────────────────────────────────────── */
@@ -77,6 +89,13 @@
 .navbar__link {
   color: var(--color-on-surface-variant);
   transition: color var(--transition-default);
+  /* Сброс для button-элемента (кнопка «О нас») */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
 }
 
 /* Hover и активная ссылка → белый */

@@ -56,7 +56,8 @@ const displayImage = computed(() =>
 <style scoped>
 /* ─── Карточка ───────────────────────────────────────────────────────────── */
 .product-card {
-  border: 1px solid var(--color-outline-variant);
+  /* [БАГ-3] Рамка усилена через --color-outline для контраста с фоном */
+  border: 1px solid var(--color-outline);
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;
@@ -99,17 +100,19 @@ const displayImage = computed(() =>
 }
 
 /* ─── Текстовый блок ─────────────────────────────────────────────────────── */
+.product-card__name {
+  /* headline-md задаёт font-family, size, weight через глобальный класс */
+  color: var(--color-on-surface);
+}
+
 .product-card__body {
   padding: 16px;
+  /* [БАГ-3] Фон body слегка выделен на фоне страницы */
+  background-color: var(--color-surface-container);
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex: 1;
-}
-
-.product-card__name {
-  /* headline-md задаёт font-family, size, weight через глобальный класс */
-  color: var(--color-on-surface);
 }
 
 .product-card__desc {

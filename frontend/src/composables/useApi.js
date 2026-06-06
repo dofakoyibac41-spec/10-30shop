@@ -26,6 +26,12 @@ export async function apiFetch(path, options = {}) {
     throw new Error(err.error || `HTTP ${res.status}`);
   }
 
+  // [БАГ-5] DELETE /api/categories/:id и DELETE /api/products/:id возвращают
+  // 204 No Content (пустое тело). Парсить JSON нельзя — вернём null.
+  if (res.status === 204 || res.headers.get('content-length') === '0') {
+    return null;
+  }
+
   return res.json();
 }
 
