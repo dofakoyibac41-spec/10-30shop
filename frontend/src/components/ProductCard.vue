@@ -71,8 +71,8 @@ const displayImage = computed(() =>
 
 /* ─── Изображение ────────────────────────────────────────────────────────── */
 .product-card__image-wrap {
-  /* 4:5 portrait — ключевое соотношение для fashion-контента */
-  aspect-ratio: 4 / 5;
+  /* 3:4 — компактнее чем 4:5, хорошо смотрится при 4 колонках */
+  aspect-ratio: 3 / 4;
   overflow: hidden; /* clip scale при hover — граница остаётся sharp */
   background-color: var(--color-surface-container);
   flex-shrink: 0;

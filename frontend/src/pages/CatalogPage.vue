@@ -192,7 +192,7 @@ onMounted(async () => {
   margin-top: 32px;
   display: grid;
   /* Фиксированные 3 колонки + border-подход вместо background-trick */
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0;
   border-top: 1px solid var(--color-outline-variant);
   border-left: 1px solid var(--color-outline-variant);
@@ -267,6 +267,12 @@ onMounted(async () => {
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 1280px) {
+  .page-catalog__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
   .page-catalog__grid {
     grid-template-columns: repeat(2, 1fr);
