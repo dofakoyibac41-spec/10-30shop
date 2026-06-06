@@ -57,7 +57,7 @@ const displayImage = computed(() =>
 /* ─── Карточка ───────────────────────────────────────────────────────────── */
 .product-card {
   border: none;
-  background-color: var(--color-background);
+  background-color: var(--color-surface-container-high);
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -73,7 +73,7 @@ const displayImage = computed(() =>
   /* 3:4 — компактнее чем 4:5, хорошо смотрится при 4 колонках */
   aspect-ratio: 3 / 4;
   overflow: hidden; /* clip scale при hover — граница остаётся sharp */
-  background-color: var(--color-surface-container);
+  background-color: var(--color-surface-container-high);
   flex-shrink: 0;
 }
 
@@ -94,7 +94,7 @@ const displayImage = computed(() =>
 .product-card__placeholder {
   width: 100%;
   height: 100%;
-  background-color: var(--color-surface-container);
+  background-color: var(--color-surface-container-high);
   /* Нет текста, нет иконок — строгий пустой прямоугольник */
 }
 
@@ -107,7 +107,7 @@ const displayImage = computed(() =>
 .product-card__body {
   padding: 16px;
   /* [БАГ-3] Фон body слегка выделен на фоне страницы */
-  background-color: var(--color-surface-container);
+  background-color: var(--color-surface-container-high);
   display: flex;
   flex-direction: column;
   gap: 8px;

@@ -193,13 +193,13 @@ function goToCatalog(categoryId) {
   cursor: pointer;
   border: none;
   border: none;
-  background-color: var(--color-background);
+  background-color: var(--color-surface-container-high);
   text-align: left;
   transition: background-color var(--transition-default);
 }
 
 .category-card:hover {
-  background-color: var(--color-surface-container);
+  background-color: var(--color-surface-container-highest);
 }
 
 .category-card__image-wrap {

@@ -198,7 +198,7 @@ onMounted(async () => {
 
 /* Каждая карточка поверх фона */
 .page-catalog__grid > * {
-  background-color: var(--color-background);
+  background-color: var(--color-surface-container-high);
 }
 
 /* ─── Скелетон-загрузчики ────────────────────────────────────────────────── */
