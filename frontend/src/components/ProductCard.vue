@@ -56,8 +56,7 @@ const displayImage = computed(() =>
 <style scoped>
 /* ─── Карточка ───────────────────────────────────────────────────────────── */
 .product-card {
-  /* [БАГ-3] Рамка усилена через --color-outline для контраста с фоном */
-  border: 1px solid var(--color-outline);
+  border: none;
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;

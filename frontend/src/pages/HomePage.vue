@@ -183,9 +183,7 @@ function goToCatalog(categoryId) {
   display: grid;
   /* Фиксированные 4 колонки — нет пустых серых ячеек через border-подход */
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--color-outline-variant);
-  border-left: 1px solid var(--color-outline-variant);
+  gap: 16px;
 }
 
 /* ─── Карточка категории ─────────────────────────────────────────────────── */
@@ -194,9 +192,7 @@ function goToCatalog(categoryId) {
   flex-direction: column;
   cursor: pointer;
   border: none;
-  /* Разделители через border — нет серого фона при неполной сетке */
-  border-right: 1px solid var(--color-outline-variant);
-  border-bottom: 1px solid var(--color-outline-variant);
+  border: none;
   background-color: var(--color-background);
   text-align: left;
   transition: background-color var(--transition-default);

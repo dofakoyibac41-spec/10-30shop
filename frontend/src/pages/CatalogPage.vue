@@ -193,16 +193,12 @@ onMounted(async () => {
   display: grid;
   /* Фиксированные 3 колонки + border-подход вместо background-trick */
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--color-outline-variant);
-  border-left: 1px solid var(--color-outline-variant);
+  gap: 16px;
 }
 
-/* Каждая карточка с правой и нижней границей — нет серых пустых ячеек */
+/* Каждая карточка поверх фона */
 .page-catalog__grid > * {
   background-color: var(--color-background);
-  border-right: 1px solid var(--color-outline-variant);
-  border-bottom: 1px solid var(--color-outline-variant);
 }
 
 /* ─── Скелетон-загрузчики ────────────────────────────────────────────────── */
