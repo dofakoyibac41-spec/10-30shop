@@ -191,15 +191,18 @@ onMounted(async () => {
 .page-catalog__grid {
   margin-top: 32px;
   display: grid;
-  /* auto-fit схлопывает пустые колонки — серого фона не будет */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1px;
-  background-color: var(--color-outline-variant);
+  /* Фиксированные 3 колонки + border-подход вместо background-trick */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--color-outline-variant);
+  border-left: 1px solid var(--color-outline-variant);
 }
 
-/* Каждая карточка поверх фона сетки */
+/* Каждая карточка с правой и нижней границей — нет серых пустых ячеек */
 .page-catalog__grid > * {
   background-color: var(--color-background);
+  border-right: 1px solid var(--color-outline-variant);
+  border-bottom: 1px solid var(--color-outline-variant);
 }
 
 /* ─── Скелетон-загрузчики ────────────────────────────────────────────────── */
