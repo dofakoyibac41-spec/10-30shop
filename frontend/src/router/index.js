@@ -11,11 +11,16 @@ import CatalogPage from '../pages/CatalogPage.vue';
 import AdminPage   from '../pages/AdminPage.vue';
 import LoginPage   from '../pages/LoginPage.vue';
 
+// Адрес админки берётся из env (VITE_ADMIN_PATH) — не хардкод.
+// По умолчанию /manage-1030 если переменная не задана.
+const ADMIN_PATH = import.meta.env.VITE_ADMIN_PATH || '/manage-1030';
+const ADMIN_LOGIN_PATH = ADMIN_PATH + '/login';
+
 const routes = [
-  { path: '/',            component: HomePage,    name: 'home'    },
-  { path: '/catalog',     component: CatalogPage, name: 'catalog' },
-  { path: '/admin',       component: AdminPage,   name: 'admin'   },
-  { path: '/admin/login', component: LoginPage,   name: 'login'   },
+  { path: '/',              component: HomePage,    name: 'home'    },
+  { path: '/catalog',       component: CatalogPage, name: 'catalog' },
+  { path: ADMIN_PATH,       component: AdminPage,   name: 'admin'   },
+  { path: ADMIN_LOGIN_PATH, component: LoginPage,   name: 'login'   },
 ];
 
 const router = createRouter({
@@ -35,7 +40,7 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const { isAuthenticated } = useAuth();
   const isProtectedAdmin =
-    to.path.startsWith('/admin') && to.path !== '/admin/login';
+    to.path.startsWith(ADMIN_PATH) && to.path !== ADMIN_LOGIN_PATH;
 
   if (isProtectedAdmin && !isAuthenticated()) {
     next({ name: 'login' });
