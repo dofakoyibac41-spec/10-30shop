@@ -31,48 +31,50 @@
     <div class="divider"></div>
 
     <!-- ─── Категории из API ───────────────────────────────────────────────────── -->
-    <section class="categories container section">
-      <p class="label-sm text-muted categories__label">— Категории —</p>
+    <section class="categories-section section">
+      <div class="container">
+        <p class="label-sm text-muted categories__label">— Категории —</p>
 
-      <!-- Загрузка -->
-      <div v-if="categoriesLoading" class="categories__skeleton">
-        <div
-          v-for="n in 4"
-          :key="n"
-          class="category-card category-card--skeleton"
-          aria-hidden="true"
-        />
-      </div>
+        <!-- Загрузка -->
+        <div v-if="categoriesLoading" class="categories__skeleton">
+          <div
+            v-for="n in 4"
+            :key="n"
+            class="category-card category-card--skeleton"
+            aria-hidden="true"
+          />
+        </div>
 
-      <!-- Ошибка -->
-      <p v-else-if="categoriesError" class="body-md text-muted categories__error">
-        Не удалось загрузить категории.
-      </p>
+        <!-- Ошибка -->
+        <p v-else-if="categoriesError" class="body-md text-muted categories__error">
+          Не удалось загрузить категории.
+        </p>
 
-      <!-- Сетка категорий -->
-      <div v-else class="categories__grid">
-        <button
-          v-for="cat in categories"
-          :key="cat.id"
-          class="category-card"
-          @click="goToCatalog(cat.id)"
-        >
-          <!-- Обложка категории (или placeholder) -->
-          <div class="category-card__image-wrap">
-            <img
-              v-if="cat.image_url"
-              :src="cat.image_url"
-              :alt="cat.name"
-              class="category-card__image"
-              loading="lazy"
-            />
-            <div v-else class="category-card__placeholder" aria-hidden="true" />
-          </div>
-          <!-- Название -->
-          <div class="category-card__body">
-            <span class="label-sm">{{ cat.name }}</span>
-          </div>
-        </button>
+        <!-- Сетка категорий -->
+        <div v-else class="categories__grid">
+          <button
+            v-for="cat in categories"
+            :key="cat.id"
+            class="category-card"
+            @click="goToCatalog(cat.id)"
+          >
+            <!-- Обложка категории (или placeholder) -->
+            <div class="category-card__image-wrap">
+              <img
+                v-if="cat.image_url"
+                :src="cat.image_url"
+                :alt="cat.name"
+                class="category-card__image"
+                loading="lazy"
+              />
+              <div v-else class="category-card__placeholder" aria-hidden="true" />
+            </div>
+            <!-- Название -->
+            <div class="category-card__body">
+              <span class="label-sm">{{ cat.name }}</span>
+            </div>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -82,21 +84,23 @@
          id="about" — якорь для NavBar ссылки /#about
          scrollBehavior в роутере обеспечивает плавный скролл
          ─────────────────────────────────────────────────────────────────────── -->
-    <section id="about" class="about container section">
-      <h2 class="headline-lg about__title">10:30 AM</h2>
-      <p class="body-lg text-muted about__text">
-        10:30 утра называют временем джентльменов.
-      </p>
-      <p class="body-lg text-muted about__text">
-        Это уже не сонное утро, но ещё не суета дня. Момент, когда ты собран,
-        спокоен и выглядишь так, как надо.
-      </p>
-      <p class="body-lg text-muted about__text">
-        10:30am — одежда под это состояние.
-      </p>
-      <RouterLink to="/catalog" class="btn-ghost about__cta">
-        Смотреть каталог
-      </RouterLink>
+    <section id="about" class="about-section section">
+      <div class="container">
+        <h2 class="headline-lg about__title">10:30 AM</h2>
+        <p class="body-lg text-muted about__text">
+          10:30 утра называют временем джентльменов.
+        </p>
+        <p class="body-lg text-muted about__text">
+          Это уже не сонное утро, но ещё не суета дня. Момент, когда ты собран,
+          спокоен и выглядишь так, как надо.
+        </p>
+        <p class="body-lg text-muted about__text">
+          10:30am — одежда под это состояние.
+        </p>
+        <RouterLink to="/catalog" class="btn-ghost about__cta">
+          Смотреть каталог
+        </RouterLink>
+      </div>
     </section>
 
   </div>
