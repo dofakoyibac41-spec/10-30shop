@@ -86,9 +86,14 @@
       <p class="label-sm text-muted about__label">О бренде</p>
       <h2 class="headline-lg about__title">10:30 AM</h2>
       <p class="body-lg text-muted about__text">
-        Мужская одежда без компромиссов. Минимум деталей — максимум характера.
-        Каждая вещь спроектирована так, чтобы работать в любой ситуации.
-        Никаких лишних элементов — только то, что нужно.
+        10:30 утра называют временем джентльменов.
+      </p>
+      <p class="body-lg text-muted about__text">
+        Это уже не сонное утро, но ещё не суета дня. Момент, когда ты собран,
+        спокоен и выглядишь так, как надо.
+      </p>
+      <p class="body-lg text-muted about__text">
+        10:30am — одежда под это состояние.
       </p>
       <RouterLink to="/catalog" class="btn-ghost about__cta">
         Смотреть каталог
@@ -260,7 +265,11 @@ function goToCatalog(categoryId) {
 }
 
 .about__text {
-  max-width: 640px;
+  max-width: 560px;
+  margin-bottom: 20px;
+}
+
+.about__text:last-of-type {
   margin-bottom: 48px;
 }
 
