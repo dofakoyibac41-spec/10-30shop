@@ -83,7 +83,6 @@
          scrollBehavior в роутере обеспечивает плавный скролл
          ─────────────────────────────────────────────────────────────────────── -->
     <section id="about" class="about container section">
-      <p class="label-sm text-muted about__label">О бренде</p>
       <h2 class="headline-lg about__title">10:30 AM</h2>
       <p class="body-lg text-muted about__text">
         10:30 утра называют временем джентльменов.
@@ -186,9 +185,10 @@ function goToCatalog(categoryId) {
 /* ─── Сетка категорий: auto-fit — нет пустых ячеек [БАГ-2] ─────────────── */
 .categories__grid {
   display: grid;
-  /* Фиксированные 4 колонки — нет пустых серых ячеек через border-подход */
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  /* Safari fix: grid items can overflow without this */
+  overflow: hidden;
 }
 
 /* ─── Карточка категории ─────────────────────────────────────────────────── */
@@ -197,10 +197,12 @@ function goToCatalog(categoryId) {
   flex-direction: column;
   cursor: pointer;
   border: none;
-  border: none;
   background-color: var(--color-surface-container-high);
   text-align: left;
   transition: background-color var(--transition-default);
+  /* Safari fix: prevent grid item overflow */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .category-card:hover {
