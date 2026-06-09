@@ -56,4 +56,21 @@ db.exec(`
   -- INTEGER PK уже покрыт rowid index, дополнительного не нужно
 `);
 
+// ─── Миграция: добавить колонку price если её ещё нет ────────────────────────
+// ALTER TABLE ADD COLUMN падает с ошибкой если колонка уже есть — ловим её.
+try {
+  db.exec('ALTER TABLE products ADD COLUMN price INTEGER NOT NULL DEFAULT 0');
+} catch (_) {
+  // Колонка уже существует — пропускаем
+}
+
+// ─── Миграция: sort_order для категорий и товаров ─────────────────────────────
+try {
+  db.exec('ALTER TABLE categories ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0');
+} catch (_) {}
+
+try {
+  db.exec('ALTER TABLE products ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0');
+} catch (_) {}
+
 module.exports = db;

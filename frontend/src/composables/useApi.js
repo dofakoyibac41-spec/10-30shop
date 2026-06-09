@@ -127,12 +127,39 @@ export function useAdminApi() {
       body:    JSON.stringify({ ids }),
     });
 
+  // PATCH /api/products/:id  { name, description?, category_id, image_url, price? }  → обновлённый объект
+  const updateProduct = (id, data) =>
+    apiFetch(`/api/products/${id}`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+      body:    JSON.stringify(data),
+    });
+
+  // POST /api/categories/reorder  [{ id, sort_order }]  → { ok: true }
+  const reorderCategories = (items) =>
+    apiFetch('/api/categories/reorder', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+      body:    JSON.stringify(items),
+    });
+
+  // POST /api/products/reorder  [{ id, sort_order }]  → { ok: true }
+  const reorderProducts = (items) =>
+    apiFetch('/api/products/reorder', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+      body:    JSON.stringify(items),
+    });
+
   return {
     createCategory,
     updateCategory,
     deleteCategory,
     createProduct,
+    updateProduct,
     deleteProduct,
     deleteProductsBulk,
+    reorderCategories,
+    reorderProducts,
   };
 }

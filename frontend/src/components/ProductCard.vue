@@ -22,6 +22,9 @@
     <!-- Текстовый блок -->
     <div class="product-card__body">
       <h3 class="product-card__name headline-md">{{ name }}</h3>
+      <p v-if="price" class="product-card__price label-sm">
+        {{ price.toLocaleString('ru-RU') }} ₽
+      </p>
       <p v-if="description" class="product-card__desc body-md text-muted">
         {{ description }}
       </p>
@@ -38,6 +41,7 @@ const props = defineProps({
   description: { type: String, default: '' },
   image_url:   { type: String, default: '' },
   category_id: { type: Number, required: true },
+  price:       { type: Number, default: 0 },
 });
 
 // При ошибке загрузки изображения — показать placeholder
@@ -102,6 +106,11 @@ const displayImage = computed(() =>
 .product-card__name {
   /* headline-md задаёт font-family, size, weight через глобальный класс */
   color: var(--color-on-surface);
+}
+
+.product-card__price {
+  color: var(--color-primary);
+  letter-spacing: var(--ls-label);
 }
 
 .product-card__body {

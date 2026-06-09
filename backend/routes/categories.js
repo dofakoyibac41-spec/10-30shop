@@ -13,7 +13,7 @@ const router = express.Router();
 
 // ─── GET /api/categories ──────────────────────────────────────────────────────
 router.get('/', (req, res) => {
-  const categories = db.prepare('SELECT * FROM categories ORDER BY id').all();
+  const categories = db.prepare('SELECT * FROM categories ORDER BY sort_order ASC, id ASC').all();
   res.json(categories);
 });
 
@@ -91,6 +91,21 @@ router.patch('/:id', authMiddleware, (req, res) => {
 
   const updated = db.prepare('SELECT * FROM categories WHERE id = ?').get(id);
   res.json(updated);
+});
+
+// ─── POST /api/categories/reorder ────────────────────────────────────────────────────
+// Принимает: [{ id, sort_order }] — обновляет sort_order батчем
+router.post('/reorder', authMiddleware, (req, res) => {
+  const items = req.body;
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'Ожидается массив [{id, sort_order}]' });
+  }
+  const stmt = db.prepare('UPDATE categories SET sort_order=? WHERE id=?');
+  const updateAll = db.transaction((rows) => {
+    for (const row of rows) stmt.run(row.sort_order, row.id);
+  });
+  updateAll(items);
+  res.json({ ok: true });
 });
 
 module.exports = router;

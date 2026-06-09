@@ -90,10 +90,19 @@
           </div>
 
           <div
-            v-for="cat in categories"
+            v-for="(cat, catIdx) in categories"
             :key="cat.id"
             class="admin-row"
+            :class="{ 'row--drag-over': catDragOverIdx === catIdx && catDragFromIdx !== catIdx }"
+            draggable="true"
+            @dragstart="catDragFromIdx = catIdx"
+            @dragover.prevent="catDragOverIdx = catIdx"
+            @dragleave="catDragOverIdx = null"
+            @drop.prevent="onCatDrop(catIdx)"
+            @dragend="catDragOverIdx = null"
           >
+            <span class="drag-handle" title="Перетащить">⠿</span>
+
             <!-- Режим просмотра -->
             <template v-if="editingCatId !== cat.id">
               <span class="admin-row__name body-md">{{ cat.name }}</span>
@@ -112,11 +121,27 @@
 
             <!-- Режим редактирования (inline) -->
             <template v-else>
-              <input
-                v-model="editCatName"
-                class="input-underline admin-row__edit-input"
-                @keydown.esc="editingCatId = null"
-              />
+              <div class="admin-row__edit-fields">
+                <input
+                  v-model="editCatName"
+                  class="input-underline admin-row__edit-input"
+                  placeholder="Название *"
+                  @keydown.esc="editingCatId = null"
+                />
+                <input
+                  v-model="editCatImageUrl"
+                  class="input-underline admin-row__edit-input"
+                  placeholder="URL картинки (необязательно)"
+                  @keydown.esc="editingCatId = null"
+                />
+                <img
+                  v-if="editCatImageUrl"
+                  :src="editCatImageUrl"
+                  class="form-preview"
+                  alt="Превью категории"
+                  @error="editCatImageUrl = ''"
+                />
+              </div>
               <div class="admin-row__actions">
                 <button
                   class="btn-primary btn-sm"
@@ -188,6 +213,17 @@
               @error="newProdImageUrl = ''"
             />
 
+            <!-- Цена -->
+            <input
+              v-model="newProdPrice"
+              class="input-underline"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="Цена (₽)"
+              :disabled="prodLoading"
+            />
+
             <p v-if="prodError" class="error-text">{{ prodError }}</p>
             <button
               type="submit"
@@ -223,7 +259,7 @@
           <table v-else class="admin-table">
             <thead>
               <tr>
-                <th>
+                <th class="th-drag-check">
                   <input
                     type="checkbox"
                     :checked="allSelected"
@@ -234,37 +270,77 @@
                 <th>Фото</th>
                 <th>Название</th>
                 <th>Категория</th>
+                <th>Цена</th>
                 <th>Действия</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="prod in products" :key="prod.id">
-                <td>
-                  <input
-                    type="checkbox"
-                    :value="prod.id"
-                    v-model="selectedIds"
-                  />
-                </td>
-                <td>
-                  <img
-                    :src="prod.image_url"
-                    class="table-thumb"
-                    :alt="prod.name"
-                  />
-                </td>
-                <td class="body-md">{{ prod.name }}</td>
-                <td class="label-sm text-muted">{{ getCatName(prod.category_id) }}</td>
-                <td>
-                  <button
-                    class="btn-ghost btn-sm btn-danger"
-                    @click="deleteOne(prod.id)"
-                    :disabled="prodLoading"
-                  >
-                    Удалить
-                  </button>
-                </td>
-              </tr>
+              <template v-for="(prod, prodIdx) in products" :key="prod.id">
+                <!-- Основная строка товара -->
+                <tr
+                  draggable="true"
+                  :class="{ 'row--drag-over': prodDragOverIdx === prodIdx && prodDragFromIdx !== prodIdx }"
+                  @dragstart="prodDragFromIdx = prodIdx"
+                  @dragover.prevent="prodDragOverIdx = prodIdx"
+                  @dragleave="prodDragOverIdx = null"
+                  @drop.prevent="onProdDrop(prodIdx)"
+                  @dragend="prodDragOverIdx = null"
+                >
+                  <td class="td-drag-check">
+                    <span class="drag-handle" title="Перетащить">⠿</span>
+                    <input type="checkbox" :value="prod.id" v-model="selectedIds" />
+                  </td>
+                  <td>
+                    <img :src="prod.image_url" class="table-thumb" :alt="prod.name" />
+                  </td>
+                  <td class="body-md">{{ prod.name }}</td>
+                  <td class="label-sm text-muted">{{ getCatName(prod.category_id) }}</td>
+                  <td class="body-md">{{ prod.price ? prod.price.toLocaleString('ru-RU') + ' ₽' : '—' }}</td>
+                  <td>
+                    <div class="td-actions">
+                      <button
+                        class="btn-ghost btn-sm"
+                        @click="startEditProd(prod)"
+                        :disabled="prodLoading"
+                      >Редактировать</button>
+                      <button
+                        class="btn-ghost btn-sm btn-danger"
+                        @click="deleteOne(prod.id)"
+                        :disabled="prodLoading"
+                      >Удалить</button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- Развернутая форма редактирования -->
+                <tr v-if="editingProdId === prod.id" class="admin-table__edit-row">
+                  <td colspan="6">
+                    <div class="prod-edit-form">
+                      <input v-model="editProdName" class="input-underline" placeholder="Название *" />
+                      <textarea v-model="editProdDesc" class="input-underline admin-textarea" placeholder="Описание" />
+                      <select v-model="editProdCategoryId" class="input-underline">
+                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+                      </select>
+                      <input v-model="editProdImageUrl" class="input-underline" placeholder="URL картинки *" />
+                      <img
+                        v-if="editProdImageUrl"
+                        :src="editProdImageUrl"
+                        class="form-preview"
+                        alt="Превью"
+                        @error="editProdImageUrl = ''"
+                      />
+                      <input v-model="editProdPrice" class="input-underline" type="number" min="0" placeholder="Цена (₽)" />
+                      <div class="prod-edit-actions">
+                        <button
+                          class="btn-primary btn-sm"
+                          :disabled="!editProdName.trim() || !editProdImageUrl.trim() || prodLoading"
+                          @click="saveEditProd(prod.id)"
+                        >Сохранить</button>
+                        <button class="btn-ghost btn-sm" @click="editingProdId = null">Отмена</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
         </div>
@@ -285,7 +361,8 @@ const { logout }                                 = useAuth();
 const { getCategories, getProducts }             = useApi();
 const {
   createCategory, updateCategory, deleteCategory,
-  createProduct,  deleteProduct,  deleteProductsBulk,
+  createProduct,  updateProduct,  deleteProduct,  deleteProductsBulk,
+  reorderCategories, reorderProducts,
 } = useAdminApi();
 
 // ─── Вкладки ──────────────────────────────────────────────────────────────────
@@ -322,6 +399,7 @@ const catLoading   = ref(false);
 const catError     = ref('');
 const editingCatId = ref(null);
 const editCatName  = ref('');
+const editCatImageUrl = ref('');
 
 async function loadCategories() {
   try {
@@ -368,15 +446,19 @@ async function deleteCat(id) {
 }
 
 function startEdit(cat) {
-  editingCatId.value = cat.id;
-  editCatName.value  = cat.name;
+  editingCatId.value    = cat.id;
+  editCatName.value     = cat.name;
+  editCatImageUrl.value = cat.image_url || '';
 }
 
 async function saveEdit(id) {
   if (!editCatName.value.trim()) return;
   catLoading.value = true;
   try {
-    await updateCategory(id, { name: editCatName.value.trim() });
+    await updateCategory(id, {
+      name:      editCatName.value.trim(),
+      image_url: editCatImageUrl.value.trim() || null,
+    });
     editingCatId.value = null;
     await loadCategories();
     showToast('Категория обновлена');
@@ -386,7 +468,29 @@ async function saveEdit(id) {
   } finally {
     catLoading.value = false;
   }
+}// ─── Drag-and-drop: Категории ───────────────────────────────────────────────────
+const catDragFromIdx = ref(null);
+const catDragOverIdx = ref(null);
+
+async function onCatDrop(toIdx) {
+  const fromIdx = catDragFromIdx.value;
+  catDragFromIdx.value = null;
+  catDragOverIdx.value = null;
+  if (fromIdx === null || fromIdx === toIdx) return;
+
+  const arr = [...categories.value];
+  const [moved] = arr.splice(fromIdx, 1);
+  arr.splice(toIdx, 0, moved);
+  categories.value = arr; // Оптимистичное обновление UI
+
+  try {
+    await reorderCategories(arr.map((c, i) => ({ id: c.id, sort_order: i })));
+  } catch (e) {
+    showToast('Ошибка сохранения порядка', 'error');
+    await loadCategories(); // Откат при ошибке
+  }
 }
+
 
 // ═════════════════════════════════════════════════════════════════════════════
 // ТОВАРЫ
@@ -396,6 +500,7 @@ const newProdName     = ref('');
 const newProdDesc     = ref('');
 const newProdCategoryId = ref('');
 const newProdImageUrl = ref('');
+const newProdPrice    = ref('');
 const prodLoading     = ref(false);
 const prodError       = ref('');
 const selectedIds     = ref([]);
@@ -424,11 +529,13 @@ async function addProduct() {
       description: newProdDesc.value.trim() || null,
       category_id: newProdCategoryId.value,
       image_url:   newProdImageUrl.value.trim(),
+      price:       parseInt(newProdPrice.value, 10) || 0,
     });
     newProdName.value       = '';
     newProdDesc.value       = '';
     newProdCategoryId.value = '';
     newProdImageUrl.value   = '';
+    newProdPrice.value      = '';
     await loadProducts();
     showToast('Товар добавлен');
   } catch (e) {
@@ -480,6 +587,70 @@ function toggleAll(e) {
 function getCatName(catId) {
   const cat = categories.value.find((c) => c.id === catId);
   return cat ? cat.name : `#${catId}`;
+}
+
+// ─── Drag-and-drop: Товары ─────────────────────────────────────────────────────
+const prodDragFromIdx = ref(null);
+const prodDragOverIdx = ref(null);
+
+async function onProdDrop(toIdx) {
+  const fromIdx = prodDragFromIdx.value;
+  prodDragFromIdx.value = null;
+  prodDragOverIdx.value = null;
+  if (fromIdx === null || fromIdx === toIdx) return;
+
+  const arr = [...products.value];
+  const [moved] = arr.splice(fromIdx, 1);
+  arr.splice(toIdx, 0, moved);
+  products.value = arr; // Оптимистичное обновление UI
+
+  try {
+    await reorderProducts(arr.map((p, i) => ({ id: p.id, sort_order: i })));
+  } catch (e) {
+    showToast('Ошибка сохранения порядка', 'error');
+    await loadProducts(); // Откат при ошибке
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// РЕДАКТИРОВАНИЕ ТОВАРА
+// ═════════════════════════════════════════════════════════════════════════════
+const editingProdId      = ref(null);
+const editProdName       = ref('');
+const editProdDesc       = ref('');
+const editProdCategoryId = ref(null);
+const editProdImageUrl   = ref('');
+const editProdPrice      = ref('');
+
+function startEditProd(prod) {
+  editingProdId.value      = prod.id;
+  editProdName.value       = prod.name;
+  editProdDesc.value       = prod.description || '';
+  editProdCategoryId.value = prod.category_id;
+  editProdImageUrl.value   = prod.image_url;
+  editProdPrice.value      = prod.price || '';
+}
+
+async function saveEditProd(id) {
+  if (!editProdName.value.trim() || !editProdImageUrl.value.trim()) return;
+  prodLoading.value = true;
+  try {
+    await updateProduct(id, {
+      name:        editProdName.value.trim(),
+      description: editProdDesc.value.trim() || null,
+      category_id: editProdCategoryId.value,
+      image_url:   editProdImageUrl.value.trim(),
+      price:       parseInt(editProdPrice.value, 10) || 0,
+    });
+    editingProdId.value = null;
+    await loadProducts();
+    showToast('Товар обновлён');
+  } catch (e) {
+    prodError.value = e.message;
+    showToast(e.message, 'error');
+  } finally {
+    prodLoading.value = false;
+  }
 }
 
 // ─── Инициализация ────────────────────────────────────────────────────────────
@@ -620,6 +791,14 @@ onMounted(async () => {
   min-width: 160px;
 }
 
+.admin-row__edit-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 200px;
+}
+
 /* ─── Таблица товаров ────────────────────────────────────────────────────── */
 .admin-bulk-bar {
   display: flex;
@@ -688,6 +867,72 @@ onMounted(async () => {
 .divider--tabs    { margin: 0 0 40px; }
 .divider--section { margin: 40px 0; }
 
+/* ─── Drag-and-drop ──────────────────────────────────────────────────────── */
+.drag-handle {
+  cursor: grab;
+  color: var(--color-on-surface-variant);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+  user-select: none;
+  flex-shrink: 0;
+  transition: color var(--transition-default);
+}
+
+.drag-handle:hover {
+  color: var(--color-primary);
+}
+
+.row--drag-over {
+  border-top: 2px solid var(--color-primary);
+}
+
+.td-drag-check {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.td-drag-check .drag-handle {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.td-drag-check input[type="checkbox"] {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.th-drag-check {
+  width: 80px;
+}
+
+.td-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ─── Форма редактирования товара (expand row) ───────────────────────────── */
+.admin-table__edit-row td {
+  background-color: var(--color-surface-container);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.prod-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+  max-width: 560px;
+}
+
+.prod-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .admin-table th:nth-child(2),
@@ -700,4 +945,5 @@ onMounted(async () => {
     padding: 10px 8px;
   }
 }
+
 </style>

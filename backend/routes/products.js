@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
     params.push(categoryId);
   }
 
-  itemsSql += ' ORDER BY id DESC LIMIT ? OFFSET ?';
+  itemsSql += ' ORDER BY sort_order ASC, id ASC LIMIT ? OFFSET ?';
 
   const items = db.prepare(itemsSql).all(...params, limit, offset);
   const { total } = db.prepare(countSql).get(...params);
@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
 
 // ─── POST /api/products ───────────────────────────────────────────────────────
 router.post('/', authMiddleware, (req, res) => {
-  const { name, description, category_id, image_url } = req.body || {};
+  const { name, description, category_id, image_url, price } = req.body || {};
 
   if (!name || !name.trim()) {
     return res.status(400).json({ error: 'Поле name обязательно' });
@@ -59,6 +59,10 @@ router.post('/', authMiddleware, (req, res) => {
     return res.status(400).json({ error: 'Поле image_url обязательно' });
   }
 
+  // Цена: целое неотрицательное число (рубли), по умолчанию 0
+  const priceVal = parseInt(price, 10);
+  const safePriceVal = (!isNaN(priceVal) && priceVal >= 0) ? priceVal : 0;
+
   // Проверяем что категория существует
   const category = db.prepare('SELECT id FROM categories WHERE id = ?').get(category_id);
   if (!category) {
@@ -66,10 +70,10 @@ router.post('/', authMiddleware, (req, res) => {
   }
 
   const stmt = db.prepare(
-    `INSERT INTO products (name, description, category_id, image_url)
-     VALUES (?, ?, ?, ?)`
+    `INSERT INTO products (name, description, category_id, image_url, price)
+     VALUES (?, ?, ?, ?, ?)`
   );
-  const result = stmt.run(name.trim(), description || null, category_id, image_url.trim());
+  const result = stmt.run(name.trim(), description || null, category_id, image_url.trim(), safePriceVal);
 
   const created = db.prepare('SELECT * FROM products WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(created);
@@ -115,6 +119,50 @@ router.delete('/:id', authMiddleware, (req, res) => {
 
   db.prepare('DELETE FROM products WHERE id = ?').run(id);
   res.status(204).send();
+});
+
+// ─── PATCH /api/products/:id ────────────────────────────────────────────────────
+// Редактировать товар: name, description?, category_id, image_url, price?
+router.patch('/:id', authMiddleware, (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (isNaN(id)) return res.status(400).json({ error: 'Некорректный id' });
+
+  const product = db.prepare('SELECT * FROM products WHERE id = ?').get(id);
+  if (!product) return res.status(404).json({ error: 'Товар не найден' });
+
+  const { name, description, category_id, image_url, price } = req.body || {};
+
+  if (!name || !name.trim()) return res.status(400).json({ error: 'Поле name обязательно' });
+  if (!image_url || !image_url.trim()) return res.status(400).json({ error: 'Поле image_url обязательно' });
+
+  const catId = category_id !== undefined ? parseInt(category_id, 10) : product.category_id;
+  const cat = db.prepare('SELECT id FROM categories WHERE id = ?').get(catId);
+  if (!cat) return res.status(400).json({ error: `Категория с id=${catId} не найдена` });
+
+  const priceVal = parseInt(price, 10);
+  const safePriceVal = (!isNaN(priceVal) && priceVal >= 0) ? priceVal : product.price;
+
+  db.prepare(
+    `UPDATE products SET name=?, description=?, category_id=?, image_url=?, price=? WHERE id=?`
+  ).run(name.trim(), description || null, catId, image_url.trim(), safePriceVal, id);
+
+  const updated = db.prepare('SELECT * FROM products WHERE id = ?').get(id);
+  res.json(updated);
+});
+
+// ─── POST /api/products/reorder ────────────────────────────────────────────────────
+// Принимает: [{ id, sort_order }] — обновляет sort_order батчем
+router.post('/reorder', authMiddleware, (req, res) => {
+  const items = req.body;
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'Ожидается массив [{id, sort_order}]' });
+  }
+  const stmt = db.prepare('UPDATE products SET sort_order=? WHERE id=?');
+  const updateAll = db.transaction((rows) => {
+    for (const row of rows) stmt.run(row.sort_order, row.id);
+  });
+  updateAll(items);
+  res.json({ ok: true });
 });
 
 module.exports = router;
